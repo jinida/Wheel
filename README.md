@@ -1,10 +1,8 @@
-# WheelApp - AI-Powered Image Annotation Platform
-
-WheelApp is an enterprise-grade image annotation platform built with **Clean Architecture** and **DDD (Domain-Driven Design)** principles. It provides a comprehensive solution for managing datasets, annotating images, training AI models, and evaluating model performance.
+# Wheel - Computer Vision Platform
+It provides a comprehensive solution for managing datasets, annotating images, training AI models, and evaluating model performance.
 
 ## Overview
-
-WheelApp enables teams to efficiently manage the complete lifecycle of computer vision projects - from dataset creation and image annotation to model training and evaluation. Built with Blazor Server and .NET 8, it offers a responsive and intuitive user interface for annotation workflows.
+Wheel enables teams to efficiently manage the complete lifecycle of computer vision projects - from dataset creation and image annotation to model training and evaluation. Built with Blazor Server and .NET 8, it offers a responsive and intuitive user interface for annotation workflows.
 
 ## Key Features
 
@@ -19,7 +17,6 @@ WheelApp enables teams to efficiently manage the complete lifecycle of computer 
 - Support for multiple annotation types:
   - Bounding boxes (Object Detection)
   - Polygons (Semantic Segmentation)
-  - Points/Landmarks
 - Real-time annotation preview
 - Class-based color coding
 - Keyboard shortcuts for efficient workflow
@@ -82,32 +79,6 @@ WheelApp/
     ├── Services/             # UI services and coordinators
     └── wwwroot/              # Static assets
 ```
-
-## Design Patterns
-
-### Domain-Driven Design (DDD)
-- **Entities**: Rich domain models with business logic
-- **Value Objects**: Immutable objects (ProjectName, DatasetName, ColorCode, etc.)
-- **Aggregates**: Consistency boundaries (Project with ProjectClasses)
-- **Domain Events**: Decouple domain logic
-- **Repositories**: Abstraction over data access
-- **Specifications**: Reusable query logic
-
-### CQRS (Command Query Responsibility Segregation)
-- Commands for state changes (Create, Update, Delete)
-- Queries for data retrieval (Get, List)
-- MediatR for command/query handling
-- Clear separation of read/write models
-
-### Repository Pattern
-- Generic repository base with common operations
-- Specification pattern for complex queries
-- Unit of Work for transaction management
-
-### Dependency Injection
-- Interface-based abstractions
-- Scoped lifetime for DbContext and repositories
-- Transient for stateless services
 
 ## Technology Stack
 
@@ -242,31 +213,6 @@ Multiple Active Result Sets (MARS) enabled to handle concurrent database queries
 - Domain-level validation rules
 - Client-side and server-side validation
 
-## Configuration
-
-### Storage Settings
-```json
-{
-  "Storage": {
-    "RootPath": "AppData",
-    "ImagesPath": "Images",
-    "ModelsPath": "Models",
-    "ExportsPath": "Exports"
-  }
-}
-```
-
-### File Upload Settings
-```json
-{
-  "FileUploadOptions": {
-    "MaxFileSizeInBytes": 104857600,
-    "AllowedImageExtensions": [".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff"],
-    "MaxConcurrentUploads": 10
-  }
-}
-```
-
 ## Development Guidelines
 
 ### Clean Architecture Principles
@@ -289,14 +235,6 @@ Multiple Active Result Sets (MARS) enabled to handle concurrent database queries
 - Use AutoMapper for DTO mapping
 - Log using Serilog with structured logging
 - Handle exceptions with Result pattern
-
-## Contributing
-
-1. Create a feature branch from `dev`
-2. Follow clean architecture principles
-3. Write unit tests for business logic
-4. Update documentation as needed
-5. Submit pull request to `dev` branch
 
 ## License
 
