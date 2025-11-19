@@ -1,0 +1,42 @@
+@using WheelApp.Components
+
+@page "/wheeldl/evaluate/{id}"
+
+<PageTitle>Evaluation Details | WheelAD</PageTitle>
+
+<div id="resizable-container" class="resizable-container">
+    <div class="left-panel">
+        <div class="button-wrapper">
+            <SnowButton ButtonVariant="@SnowButton.Variant.Outlined" ButtonSize="@SnowButton.Size.Small" style="font-size: 12px" OnClick="NavigateBack">Back to List</SnowButton>
+        </div>
+        @if (_isLoadingPredictions)
+        {
+            <div class="prediction-loading">
+                <div class="loading-spinner"></div>
+                <p>Generating predictions...</p>
+            </div>
+        }
+        <div class="grid-loading" id="grid-loading-indicator">
+            <div class="loading-spinner"></div>
+            <p>Loading data...</p>
+        </div>
+        <EvaluateImageTable Images="@FilteredImages"
+                            SelectedImage="@_selectedImage"
+                            SortColumn="@_sortColumn"
+                            SortAscending="@_sortAscending"
+                            ProjectType="@_workspace?.ProjectType"
+                            Predictions="@_predictions"
+                            OnRowClick="@HandleRowClickFromTable"
+                            OnSortChanged="@ToggleSort" />
+    </div>
+    <div class="splitter"></div>
+    <div class="right-panel">
+        <ImageCanvas @ref="_imageCanvasRef"
+                     SelectedImage="@_selectedImage"
+                     OnImageChanged="@HandleImageChanged"
+                     DisableLabeling="true"
+                     PredictionData="@GetPredictionForSelectedImage()" />
+    </div>
+</div>
+
+<Toast @ref="_toastRef" />

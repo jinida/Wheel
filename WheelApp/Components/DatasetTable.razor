@@ -1,0 +1,46 @@
+@using WheelApp.Application.DTOs
+
+<div class="data-grid">
+    <div class="grid-header cell-checkbox"><input type="checkbox" checked="@IsAllRowsSelected" @onchange="OnToggleAllRows" /></div>
+    <div class="grid-header">Dataset Name</div>
+    <div class="grid-header">Description</div>
+    <div class="grid-header">Image Num</div>
+    <div class="grid-header">Creator</div>
+    <div class="grid-header">Creation Date</div>
+    <div class="grid-header">Change Date</div>
+    <div class="grid-header"></div>
+
+    @foreach (var dataset in Datasets)
+    {
+        <div class="grid-row @(IsRowSelected(dataset.Id) ? "selected" : "") @(IsRowHighlighted(dataset.Id) ? "highlighted" : "")"
+             @key="dataset.Id"
+             @ondblclick="() => OnRowDoubleClick.InvokeAsync(dataset.Id)"
+             style="cursor: pointer;">
+            <div class="grid-cell cell-checkbox" data-label="Select">
+                <input type="checkbox"
+                       checked="@IsRowSelected(dataset.Id)"
+                       @onchange="() => OnRowSelectionToggle.InvokeAsync(dataset.Id)"
+                       @onclick:stopPropagation="true" />
+            </div>
+            <div class="grid-cell" data-label="Dataset Name">@dataset.Name</div>
+            <div class="grid-cell" data-label="Description">@dataset.Description</div>
+            <div class="grid-cell" data-label="Image Num">@dataset.ImageCount Items</div>
+            <div class="grid-cell" data-label="Creator">@dataset.CreatedBy</div>
+            <div class="grid-cell" data-label="Creation Date">@dataset.CreatedAt.ToString("yyyy-MM-dd")</div>
+            <div class="grid-cell" data-label="Change Date">@((dataset.ModifiedAt ?? dataset.CreatedAt).ToString("yyyy-MM-dd"))</div>
+            <div class="grid-cell cell-action" data-label="Action">
+                <button class="icon-button"
+                        title="Edit dataset"
+                        @onclick="() => OnEditClick.InvokeAsync(dataset.Id)"
+                        @onclick:stopPropagation="true">
+                    <img src="svgs/dotsthreeoutlinevertical.svg" />
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+<Pagination CurrentPage="@CurrentPage"
+           TotalPages="@TotalPages"
+           ShowPagination="@ShowPagination"
+           OnPageChange="@OnPageChange" />

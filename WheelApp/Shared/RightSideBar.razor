@@ -1,0 +1,299 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using WheelApp.Pages.WheelDL
+@using WheelApp.Components
+@using WheelApp.Services
+@using WheelApp.State
+@inject NavigationManager NavigationManager
+
+<div class="rightbar @(IsCollapsed ? "collapsed" : "")">
+    <div class="tabs-container">
+        <button class="tab-button @(_activeTab == "Process" ? "active" : "")" @onclick="@(() => _activeTab = "Process")">Process</button>
+        <button class="tab-button @(_activeTab == "Label" ? "active" : "") @(!_workspaceService.CanLabel ? "disable" : "")"
+                @onclick="@(() => SwitchToLabelTab())"
+                disabled="@(!_workspaceService.CanLabel)">
+            Label
+        </button>
+    </div>
+
+    @if (_activeTab == "Process")
+    {
+        @if (!_activeTrainings.Any())
+        {
+            <div class="no-jobs-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14A2.5 2.5 0 0 1 11.5 14v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0zm-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3h-7zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3zM6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z" />
+                </svg>
+                <span>No active training processes.</span>
+            </div>
+        }
+        else
+        {
+            <div class="training-list">
+                @foreach (var training in _activeTrainings)
+                {
+                    var isExpanded = IsTrainingExpanded(training.Id);
+                    <div class="training-card">
+                        <div class="training-header">
+                            <span class="training-name">@training.Name</span>
+                            <span class="training-status @GetStatusClass(training.Status)">@training.StatusName</span>
+                        </div>
+
+                        @if (training.Status == 0) @* Pending *@
+                        {
+                            <div class="loading-spinner-small"></div>
+                        }
+                        else if (training.Status == 1) @* Running *@
+                        {
+                            <div class="progress-wrapper">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-fill" style="width: @(training.Progress)%"></div>
+                                </div>
+                                <span class="progress-percentage">@training.Progress%</span>
+                            </div>
+                        }
+
+                        <div class="training-footer">
+                            <button class="toggle-details-btn" @onclick="() => ToggleTrainingDetails(training.Id)">
+                                @if (isExpanded)
+                                {
+                                    <img src="svgs/triangle-up-svgrepo-com.svg" alt="Collapse" class="toggle-icon-svg" />
+                                }
+                                else
+                                {
+                                    <img src="svgs/triangle-down-svgrepo-com.svg" alt="Expand" class="toggle-icon-svg" />
+                                }
+                            </button>
+                        </div>
+
+                        @if (isExpanded)
+                        {
+                            <div class="training-details">
+                                <div class="detail-row">
+                                    <span class="detail-label">Project:</span>
+                                    <span class="detail-value">@training.ProjectName</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Dataset:</span>
+                                    <span class="detail-value">@training.DatasetName</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Task:</span>
+                                    <span class="detail-value">@training.TaskType</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Started:</span>
+                                    <span class="detail-value">@training.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    }
+    else if (_activeTab == "Label" && _workspaceService.CanLabel)
+    {
+        <div class="section">
+            <div class="section-header">
+                <span class="section-title">Class</span>
+                @if (_workspaceService.CurrentProjectType?.Value != 3)
+                {
+                    <button class="add-button" @onclick="(() => { _modalManager.Show(ModalManager.ModalKeys.CreateClass); _classModalRef?.ClearForm();})">
+                        +
+                    </button>
+                }
+            </div>
+            <div class="class-list-container">
+                <div class="class-list">
+                    @foreach (var classItem in _classItems)
+                    {
+                        var isMenuOpen = _openClassMenuId == classItem.Name;
+                        <div class="class-item-wrapper" @key="classItem.Id">
+                            <div class="class-item" @onclick="@(() => HandleClassItemClick(classItem))">
+                                <span class="color-swatch" style="background-color: @classItem.Color;"></span>
+                                <span class="class-name">@classItem.Name</span>
+                                <button type="button" class="options-btn"
+                                        id="class-menu-btn-@classItem.Name.Replace(" ", "-")"
+                                        @onclick="@(() => ToggleClassMenu(classItem.Name))"
+                                        @onclick:stopPropagation="true"
+                                        disabled="@(_workspaceService.CurrentProjectType?.Value == 3)">
+                                    &#8942;
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            @* Render class dropdowns with fixed positioning *@
+            @foreach (var classItem in _classItems)
+            {
+                var isMenuOpen = _openClassMenuId == classItem.Name;
+                @if (isMenuOpen && _workspaceService.CurrentProjectType?.Value != 3)
+                {
+                    <div class="dropdown-menu-fixed" @key="@($"dropdown-{classItem.Id}")" id="class-dropdown-@classItem.Name.Replace(" ", "-")" data-target="class-menu-btn-@classItem.Name.Replace(" ", "-")">
+                        <button class="dropdown-item" @onclick="() => { ShowEditClassModal(classItem); _openClassMenuId = null; }" @onclick:stopPropagation="true">
+                            <span class="dropdown-icon">✏️</span>
+                            <span>Modify</span>
+                        </button>
+                        <button class="dropdown-item delete" @onclick="async () => await DeleteClassWithConfirm(classItem)" @onclick:stopPropagation="true">
+                            <span class="dropdown-icon">🗑️</span>
+                            <span>Delete</span>
+                        </button>
+                    </div>
+                }
+            }
+        </div>
+
+
+        @* Label section - only for Detection and Segmentation tasks *@
+        @if (_workspaceService.CurrentProjectType?.MultiLabelType == true)
+        {
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-title">Label</span>
+                </div>
+                @if (_classItems.Count == 0)
+                {
+                    <div class="warning-box">
+                        <span class="warning-icon">⚠️</span>
+                        <span class="warning-message">Please add a class before labeling</span>
+                    </div>
+                }
+                <div class="label-toolbar">
+                    <button class="tool-btn-draw @(_selectedTool == LabelMode.Select ? "active" : "")" @onclick="@(() => SelectTool(LabelMode.Select))" title="Select">
+                        <span>👆</span>
+                    </button>
+                    <button class="tool-btn-draw @(_selectedTool == LabelMode.Move ? "active" : "")" @onclick="@(() => SelectTool(LabelMode.Move))" title="Move">
+                        <span>✋</span>
+                    </button>
+                    @* Hide BoundingBox and Segmentation tools for Classification (0) and Anomaly Detection (3) projects *@
+                    @if (_workspaceService.CurrentProjectType?.Value != 0 && _workspaceService.CurrentProjectType?.Value != 3)
+                    {
+                        @if (_workspaceService.CurrentProjectType?.Value != 2)
+                        {
+                            <button class="tool-btn-draw @(_selectedTool == LabelMode.BoundingBox ? "active" : "")"
+                                    @onclick="@(() => SelectTool(LabelMode.BoundingBox))"
+                                    disabled="@(_classItems.Count == 0)"
+                                    title="Bounding Box">
+                                <span>⬜</span>
+                            </button>
+                        }
+                        @if (_workspaceService.CurrentProjectType?.Value != 1)
+                        {
+                            <button class="tool-btn-draw @(_selectedTool == LabelMode.Segmentation ? "active" : "")"
+                                    @onclick="@(() => SelectTool(LabelMode.Segmentation))"
+                                    disabled="@(_classItems.Count == 0)"
+                                    title="Segmentation">
+                                <span>✏️</span>
+                            </button>
+                        }
+                    }
+                    <button class="tool-btn-draw"
+                            @onclick="@ImportPreviousLabels"
+                            title="Import labels from previous image (R)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            @* Annotations List *@
+            <div class="section annotations-section">
+                <div class="section-header">
+                    <span class="section-title">Annotations (@(_annotations?.Count ?? 0))</span>
+                    @if (_annotations != null && _annotations.Count > 0)
+                    {
+                        <button class="clear-btn" @onclick="ClearAllAnnotations">
+                            Clear
+                        </button>
+                    }
+                </div>
+                @if (_annotations != null && _annotations.Count > 0)
+                {
+                    <div class="annotations-list-scroll">
+                        @foreach (var annotation in _annotations)
+                        {
+                            var typeLabel = _workspaceService.CurrentProjectType?.Value == 1 ? "Bbox" : "Poly";
+                            var colorClass = annotation.classDto?.Color ?? "#CCCCCC";
+                            var isSelected = _selectedAnnotationIds.Contains(annotation.Id);
+                            var isMenuOpen = _openAnnotationMenuId == annotation.Id;
+
+                            <div class="annotation-item-wrapper">
+                                <div class="annotation-item @(isSelected ? "selected" : "") @colorClass"
+                                     @onclick="@((e) => HandleAnnotationItemClick(annotation.Id, e))">
+                                    <div class="annotation-info">
+                                        @* <span class="annotation-type-badge">@typeLabel</span> *@
+                                        <span class="annotation-class-name">@(annotation.classDto?.Name ?? "Unknown")</span>
+                                        <span class="annotation-id-text">#@annotation.Id</span>
+                                    </div>
+                                    <button type="button" class="options-btn"
+                                            id="annotation-menu-btn-@annotation.Id"
+                                            @onclick="@(() => ToggleAnnotationMenu(annotation.Id))"
+                                            @onclick:stopPropagation="true">
+                                        &#8942;
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    @* Render annotation dropdowns with fixed positioning *@
+                    @foreach (var annotation in _annotations)
+                    {
+                        var isMenuOpen = _openAnnotationMenuId == annotation.Id;
+                        @if (isMenuOpen)
+                        {
+                            <div class="dropdown-menu-fixed" id="annotation-dropdown-@annotation.Id" data-target="annotation-menu-btn-@annotation.Id">
+                                <button class="dropdown-item delete" @onclick="() => DeleteAnnotation(annotation.Id)" @onclick:stopPropagation="true">
+                                    <span class="dropdown-icon">🗑️</span>
+                                    <span>Delete</span>
+                                </button>
+                            </div>
+                        }
+                    }
+                }
+                else
+                {
+                    <div class="empty-annotations">
+                        <p>No annotations</p>
+                        <p class="hint-text">Select a tool and draw on the image</p>
+                    </div>
+                }
+            </div>
+        }
+
+
+        @* Split functionality will be implemented in the future *@
+        <div class="section">
+            <div class="section-header">
+                <span class="section-title">Split</span>
+            </div>
+            <div class="button-group">
+                <SnowButton style="flex: 1" ButtonVariant="@SnowButton.Variant.Light" Onclick="@(() => _annotationService.SelectSplitRole(0))">Train</SnowButton>
+                <SnowButton style="flex: 1" ButtonVariant="@SnowButton.Variant.Light" Onclick="@(() => _annotationService.SelectSplitRole(1))">Validation</SnowButton>
+                <SnowButton style="flex: 1" ButtonVariant="@SnowButton.Variant.Light" Onclick="@(() => _annotationService.SelectSplitRole(2))">Test</SnowButton>
+            </div>
+            <SnowButton ButtonVariant="@SnowButton.Variant.Light" OnClick="HandleRandomSplit">
+                Random Split
+            </SnowButton>
+        </div>
+
+        <div class="rightbar-footer">
+            <SnowButton ButtonVariant="@SnowButton.Variant.Outlined" ButtonSize="@SnowButton.Size.Small" style="padding: 8px 8px;" OnClick="HandleInitializeProject">Initialize</SnowButton>
+            <SnowButton ButtonVariant="@SnowButton.Variant.Filled" ButtonSize="@SnowButton.Size.Small" style="padding: 8px 8px;" TrailingIconUrl="svgs/arrow-right.svg" OnClick="HandleNavigateNextPage">Next</SnowButton>
+        </div>
+    }
+</div>
+
+<ClassModal @ref="_classModalRef"
+            IsVisible="@_isCreateClassModalVisible"
+            OnSubmit="@HandleAddClassSubmit"
+            OnCancel="@HideAddClassModal" />
+
+<EditClassModal @ref="_editClassModalRef"
+                IsVisible="@_isEditClassModalVisible"
+                OnSubmit="@HandleClassModified"
+                OnCancel="@HideEditClassModal" />
+
+<Toast @ref="_toastRef" />

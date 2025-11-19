@@ -1,0 +1,142 @@
+
+.chart-container {
+    width: 100%;
+    height: 100%;
+    min-width: 300px;
+    min-height: 200px;
+    background-color: #f7f9fb;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow: hidden;
+    box-sizing: border-box;
+    font-family: var(--14-regular-font-family);
+    font-weight: var(--14-regular-font-weight);
+    font-size: var(--14-regular-font-size);
+    letter-spacing: var(--14-regular-letter-spacing);
+    line-height: var(--14-regular-line-height);
+    font-style: var(--14-regular-font-style);
+}
+
+.chart-header {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-button {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1c1c1c;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toggle-button:hover {
+    background-color: #f5f5f5;
+    border-color: #d0d0d0;
+}
+
+.toggle-button:active {
+    background-color: #e8e8e8;
+}
+
+.chart-main {
+    flex-grow: 1;
+    display: flex;
+    gap: 8px;
+    position: relative;
+}
+
+.chart-plot-area {
+    flex-grow: 1;
+    position: relative;
+    padding-bottom: 28px;
+}
+
+.chart-title {
+    padding-bottom: 6px;
+    font-weight: 600;
+    color: #1c1c1c;
+}
+
+.chart-yaxis {
+    position: relative;
+    flex-shrink: 0;
+    width: 35px;
+    height: calc(100%);
+}
+
+.chart-yaxis-label {
+    position: absolute;
+    right: 0;
+    font-size: 12px;
+    color: #1c1c1c99;
+    text-align: right;
+    transform: translateY(-50%);
+}
+
+.chart-xaxis {
+    position: absolute;
+    bottom: -28px;
+    left: 0;
+    width: 100%;
+    height: 28px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.chart-xaxis-label {
+    flex: 1;
+    font-size: 12px;
+    color: #1c1c1c99;
+    text-align: center;
+}
+
+.chart-grid-lines, .chart-bars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.chart-grid-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #0000001a;
+}
+
+.chart-bars {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.chart-bar-wrapper {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 8px;
+    box-sizing: border-box;
+}
+
+.chart-bar {
+    width: 100%;
+    max-width: 20px;
+    background-color: #95a4fc;
+    border-radius: 4px 4px 0px 0px;
+    transition: height 0.3s ease-in-out;
+}

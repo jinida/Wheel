@@ -1,0 +1,150 @@
+@inject IJSRuntime JSRuntime
+@using WheelApp.Services
+
+<div class="image-canvas-wrapper">
+    @if (SelectedImage != null)
+     {
+            <div class="canvas-header">
+                <div class="canvas-header-left">
+                    <div class="zoom-controls">
+                        <button class="ctrl-btn" @onclick="ZoomOut" title="Zoom Out">-</button>
+                        <input type="range" class="ctrl-slider" min="1" max="20" step="0.1" value="@_canvasTransformService.Zoom" @oninput="@((e) => SetZoom(double.Parse(e.Value?.ToString() ?? "1")))" />
+                        <span class="ctrl-value">@(_canvasTransformService.Zoom.ToString("F1"))x</span>
+                        <button class="ctrl-btn" @onclick="ZoomIn" title="Zoom In">+</button>
+                        <button class="ctrl-btn-reset" @onclick="ResetZoom" title="Reset Zoom">↺</button>
+                    </div>
+                </div>
+                <div class="canvas-header-right">
+                    @if (DisableLabeling)
+                    {
+                        <button class="visibility-toggle-btn @(_showPredictions ? "active" : "")"
+                                @onclick="TogglePredictions"
+                                title="Toggle Predictions">
+                            <span class="toggle-icon">@(_showPredictions ? "👁️" : "🚫")</span>
+                            <span class="toggle-label">Predictions</span>
+                        </button>
+                        <button class="visibility-toggle-btn @(_showLabels ? "active" : "")"
+                                @onclick="ToggleLabels"
+                                title="Toggle Labels">
+                            <span class="toggle-icon">@(_showLabels ? "👁️" : "🚫")</span>
+                            <span class="toggle-label">Labels</span>
+                        </button>
+                    }
+                </div>
+            </div>
+            <div class="canvas-viewport" @ref="_viewport" @onmousemove="HandleMouseMove" @onmouseleave="HandleMouseLeave">
+            <div class="canvas-content"
+                 style="transform: translate(@(_canvasTransformService.PanX)px, @(_canvasTransformService.PanY)px) scale(@(_canvasTransformService.BaseScale * _canvasTransformService.Zoom)); transform-origin: top left; cursor: @GetCursor();"
+                 @onmousedown="HandleMouseDown"
+                 @onmousemove="HandleCanvasMouseMove"
+                 @onmouseup="HandleMouseUp"
+                 @onmouseleave="HandleCanvasMouseLeave"
+                 @onwheel="HandleWheel"
+                 @ondblclick="HandleDoubleClick"
+                 @onkeydown="HandleKeyDown"
+                 tabindex="0">
+                <div class="image-container">
+                    <img @ref="_imageElement"
+                         class="canvas-image"
+                         src="@SelectedImage.Url"
+                         alt="Image"
+                         draggable="false"
+                         style="filter: brightness(@_brightness%) contrast(@_contrast%) @GetGammaFilter(); opacity: @(_imageLoaded && _canvasTransformService.IsTransformReady ? "1" : "0");"
+                         @onload="HandleImageLoad" />
+
+                    @if (_imageLoaded && _canvasTransformService.ImageWidth > 0 && _canvasTransformService.ImageHeight > 0)
+                    {
+                        <svg class="annotation-overlay"
+                             viewBox="0 0 @_canvasTransformService.ImageWidth @_canvasTransformService.ImageHeight"
+                             preserveAspectRatio="xMidYMid meet"
+                             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
+                            <defs>
+                                <clipPath id="image-clip">
+                                    <rect x="0" y="0" width="@_canvasTransformService.ImageWidth" height="@_canvasTransformService.ImageHeight"/>
+                                </clipPath>
+                            </defs>
+                            <g clip-path="url(#image-clip)">
+                                @* Prediction Layer - Renders prediction annotations (dashed style) *@
+                                @if (_showPredictions && PredictionData != null && PredictionData.Annotations.Any())
+                                {
+                                    <PredictionLayer Predictions="@PredictionData.Annotations"
+                                                   ProjectType="@_projectWorkspaceService.CurrentProjectType?.Value"
+                                                   Zoom="@_canvasTransformService.Zoom" />
+                                }
+
+                                @* Annotation Layer - Renders all existing annotations *@
+                                @if (_showLabels)
+                                {
+                                    <AnnotationLayer Annotations="@_annotations"
+                                                   SelectedAnnotationIds="@_annotationService.SelectedAnnotationIds"
+                                                   ProjectType="@_projectWorkspaceService.CurrentProjectType?.Value"
+                                                   CurrentMode="@_currentMode"
+                                                   Zoom="@_canvasTransformService.Zoom"
+                                                   OnAnnotationMouseDown="@((tuple) => HandleAnnotationMouseDown(tuple.annotationId, tuple.e))"
+                                                   OnStartResizeBBox="@((tuple) => StartResizeBBox(tuple.annotationId, tuple.handle, tuple.e))"
+                                                   OnStartMovePolygonPoint="@((tuple) => StartMovePolygonPoint(tuple.annotationId, tuple.pointIndex, tuple.e))" />
+                                }
+
+                                @* Drawing Preview - Shows preview during drawing *@
+                                <DrawingPreview CurrentDrawing="@_currentDrawing"
+                                              CurrentMousePosition="@_currentMousePosition"
+                                              IsNearFirstPoint="@_isNearFirstPoint"
+                                              SelectedColor="@_drawingToolService.SelectedClass?.Color"
+                                              ProjectType="@_projectWorkspaceService.CurrentProjectType?.Value"
+                                              Zoom="@_canvasTransformService.Zoom"
+                                              IsDraggingSelection="@_isDraggingSelection"
+                                              SelectionStartPoint="@_selectionStartPoint"
+                                              SelectionEndPoint="@_selectionEndPoint" />
+                            </g>
+                        </svg>
+                    }
+                </div>
+            </div>
+
+            @* Coordinate Display - Shows mouse coordinates *@
+            <CoordinateDisplay Show="@_showCoordinates"
+                             MouseX="@_mouseX"
+                             MouseY="@_mouseY" />
+
+            <MiniMap ImageUrl="@SelectedImage.Url"
+                     IsImageLoaded="@_imageLoaded" />
+
+            @if (!_imageLoaded)
+            {
+                <div class="canvas-loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            }
+        </div>
+
+        <div class="canvas-footer">
+            <div class="brightness-controls">
+                <div class="ctrl-group">
+                    <span class="ctrl-label">B</span>
+                    <input type="range" class="ctrl-slider" min="0" max="200" step="1" value="@_brightness" @oninput="@((e) => _brightness = double.Parse(e.Value?.ToString() ?? "100"))" />
+                    <span class="ctrl-value">@_brightness.ToString("F0")%</span>
+                </div>
+                <div class="ctrl-group">
+                    <span class="ctrl-label">γ</span>
+                    <input type="range" class="ctrl-slider" min="0.1" max="3" step="0.1" value="@_gamma" @oninput="@((e) => _gamma = double.Parse(e.Value?.ToString() ?? "1"))" />
+                    <span class="ctrl-value">@_gamma.ToString("F1")</span>
+                </div>
+                <div class="ctrl-group">
+                    <span class="ctrl-label">C</span>
+                    <input type="range" class="ctrl-slider" min="0" max="200" step="1" value="@_contrast" @oninput="@((e) => _contrast = double.Parse(e.Value?.ToString() ?? "100"))" />
+                    <span class="ctrl-value">@_contrast.ToString("F0")%</span>
+                </div>
+                <button class="ctrl-btn-reset" @onclick="ResetImageAdjustments" title="Reset Adjustments">↺</button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="canvas-empty">
+            <div class="empty-icon">🖼️</div>
+            <p>No image selected</p>
+        </div>
+    }
+</div>
+
+

@@ -1,0 +1,175 @@
+.data-grid {
+    display: none; /* Hidden by default, shown after auto-fit */
+    /* 3 columns: File Name, Label, Prediction */
+    grid-template-columns: var(--col-0-width, 200px) var(--col-1-width, 150px) var(--col-2-width, 150px);
+    width: 100%;
+    flex: 1 1 auto; /* Take remaining space in flex container */
+    min-height: 0; /* Allow flex shrinking */
+    overflow-y: auto;
+    overflow-x: hidden; /* No horizontal scroll - columns fit exactly */
+    align-content: start; /* Prevent rows from stretching to fill container height */
+}
+
+    .data-grid.ready {
+        display: grid; /* Show when ready */
+    }
+
+/* Responsive: 450px 이하 → Prediction 숨김 */
+@media (max-width: 450px) {
+    .data-grid .grid-header:nth-child(3),
+    .data-grid .grid-cell[data-label="Prediction"] {
+        display: none;
+    }
+
+    .data-grid {
+        grid-template-columns: var(--col-0-width, 200px) var(--col-1-width, 150px);
+    }
+}
+
+.grid-header {
+    font-family: var(--12-regular-font-family);
+    font-weight: var(--12-regular-font-weight);
+    color: #1c1c1c66;
+    font-size: var(--12-regular-font-size);
+    padding: 8px 12px;
+    border-bottom: 1px solid #1c1c1c33;
+    text-align: left;
+    background-color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    white-space: nowrap;
+    display: block;
+    height: 36px; /* Fixed height for header */
+    line-height: 20px;
+    overflow: visible; /* Allow header content to overflow for proper display */
+}
+
+    .grid-header .header-content {
+        display: inline-block;
+        max-width: calc(100% - 24px); /* Reserve space for resizer */
+        overflow: visible;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+        .grid-header .header-content.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+            .grid-header .header-content.sortable:hover {
+                text-decoration: underline;
+            }
+
+.column-resizer {
+    width: 12px; /* Wider hit area for easier grabbing */
+    height: 100%;
+    background-color: transparent;
+    cursor: col-resize;
+    position: absolute;
+    right: -4px; /* Offset to center on border */
+    top: 0;
+    z-index: 15;
+    user-select: none;
+    pointer-events: auto;
+    transition: background-color 0.15s ease;
+}
+
+    .column-resizer::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 2px;
+        height: 60%;
+        background-color: transparent;
+        transition: background-color 0.15s ease;
+    }
+
+    .column-resizer:hover {
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+
+    .column-resizer:hover::before {
+        background-color: #0d6efd;
+    }
+
+    .column-resizer.resizing {
+        background-color: rgba(13, 110, 253, 0.15);
+    }
+
+    .column-resizer.resizing::before {
+        background-color: #0d6efd;
+    }
+
+.sort-indicator {
+    margin-left: 4px;
+    font-size: 10px;
+    color: #0d6efd;
+}
+
+.grid-row {
+    display: contents;
+    user-select: none;
+}
+
+.grid-cell {
+    font-family: var(--12-regular-font-family);
+    font-weight: var(--12-regular-font-weight);
+    color: #1c1c1c;
+    font-size: var(--12-regular-font-size);
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #1c1c1c0d;
+    height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    scroll-margin-top: 40px;
+}
+
+    .grid-cell > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+    }
+
+.grid-row:hover .grid-cell {
+    background-color: #f7f9fb;
+}
+
+.grid-row.highlighted .grid-cell {
+    background-color: #d4e6f1;
+}
+
+.data-grid {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+    .data-grid::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    .data-grid::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .data-grid::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0);
+        border-radius: 10px;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .data-grid.scrolling {
+        scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
+    }
+
+        .data-grid.scrolling::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.4);
+        }

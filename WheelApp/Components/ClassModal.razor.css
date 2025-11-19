@@ -1,0 +1,166 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+}
+
+.modal-content {
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slide-down 0.3s ease-out;
+}
+
+@keyframes slide-down {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+}
+
+    .modal-header h3 {
+        margin: 0;
+        font-size: 1.25rem;
+    }
+
+.close-button {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    color: #6c757d;
+}
+
+    .close-button:hover {
+        color: #000;
+    }
+
+.modal-body .form-group {
+    margin-bottom: 16px;
+}
+
+    .modal-body .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        font-size: 0.875rem;
+    }
+
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+    .form-control.invalid {
+        border-color: #dc3545 !important;
+    }
+
+/* Color picker styles */
+.color-input-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.color-picker {
+    width: 60px;
+    height: 42px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 2px;
+}
+
+.color-text-input {
+    flex: 1;
+    text-transform: uppercase;
+}
+
+/* Override Blazor's automatic validation styling */
+::deep .form-control.valid {
+    border-color: #ced4da !important;
+    outline: none !important;
+}
+
+::deep .form-control.modified.valid {
+    border-color: #ced4da !important;
+    outline: none !important;
+}
+
+/* Custom validation error message (e.g., duplicate name) */
+.validation-message {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+}
+
+/* Blazor's built-in ValidationMessage component */
+::deep .validation-message {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 16px;
+    border-top: 1px solid #dee2e6;
+    margin-top: 24px;
+}
+
+@media (max-width: 576px) {
+    .modal-content {
+        padding: 16px;
+        max-width: 95%;
+    }
+
+    .modal-footer {
+        flex-direction: column-reverse;
+    }
+
+        .modal-footer .btn {
+            width: 100%;
+        }
+
+    .color-input-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .color-picker {
+        width: 100%;
+    }
+}

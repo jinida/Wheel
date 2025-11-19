@@ -1,0 +1,73 @@
+@if (ShowPagination)
+{
+    <div class="pagination-controls">
+        <button class="icon-button"
+                @onclick="() => OnPageChange.InvokeAsync(CurrentPage - 1)"
+                disabled="@(CurrentPage == 1)"
+                title="Previous page">
+            <img src="svgs/arrowlineleft.svg" alt="Previous page" />
+        </button>
+
+        @if (TotalPages <= MaxVisiblePages)
+        {
+            @for (int i = 1; i <= TotalPages; i++)
+            {
+                var pageNum = i;
+                <button class="page-button @(CurrentPage == pageNum ? "active" : "")"
+                        @onclick="() => OnPageChange.InvokeAsync(pageNum)"
+                        title="@($"Page {pageNum}")">
+                    @pageNum
+                </button>
+            }
+        }
+        else
+        {
+            @* Show first page *@
+            <button class="page-button @(CurrentPage == 1 ? "active" : "")"
+                    @onclick="() => OnPageChange.InvokeAsync(1)"
+                    title="Page 1">
+                1
+            </button>
+
+            @* Show ellipsis if needed before current page range *@
+            @if (StartPage > 2)
+            {
+                <span class="pagination-ellipsis">...</span>
+            }
+
+            @* Show pages around current page *@
+            @for (int i = StartPage; i <= EndPage; i++)
+            {
+                var pageNum = i;
+                @if (pageNum != 1 && pageNum != TotalPages)
+                {
+                    <button class="page-button @(CurrentPage == pageNum ? "active" : "")"
+                            @onclick="() => OnPageChange.InvokeAsync(pageNum)"
+                            title="@($"Page {pageNum}")">
+                        @pageNum
+                    </button>
+                }
+            }
+
+            @* Show ellipsis if needed after current page range *@
+            @if (EndPage < TotalPages - 1)
+            {
+                <span class="pagination-ellipsis">...</span>
+            }
+
+            @* Show last page *@
+            <button class="page-button @(CurrentPage == TotalPages ? "active" : "")"
+                    @onclick="() => OnPageChange.InvokeAsync(TotalPages)"
+                    title="@($"Page {TotalPages}")">
+                @TotalPages
+            </button>
+        }
+
+        <button class="icon-button"
+                @onclick="() => OnPageChange.InvokeAsync(CurrentPage + 1)"
+                disabled="@(CurrentPage == TotalPages)"
+                title="Next page">
+            <img src="svgs/arrowlineright.svg" alt="Next page" />
+        </button>
+    </div>
+}

@@ -1,0 +1,142 @@
+@page "/wheeldl/evaluates"
+@using WheelApp.Components
+
+<div class="evaluate-page-wrapper">
+    @if (_isLoading)
+    {
+        <div class="loading-indicator">
+            <p>Loading Evaluation Results...</p>
+        </div>
+    }
+    else
+    {
+        <div class="data-grid">
+            <div class="grid-header cell-checkbox"><input type="checkbox" @onchange="ToggleAllRows" /></div>
+            <div class="grid-header">Training Name</div>
+            <div class="grid-header">Project Name</div>
+            <div class="grid-header">Dataset Name</div>
+            <div class="grid-header">Task Type</div>
+            <div class="grid-header">Created</div>
+            <div class="grid-header">Ended</div>
+
+            @foreach (var result in _evaluationResults)
+            {
+                <div class="grid-row @(_selectedResult?.Id == result.Id ? "highlighted" : "")" @key="result.Id" @onclick="() => SelectResult(result)" style="cursor: pointer;">
+                    <div class="grid-cell cell-checkbox" data-label="Select">
+                        <input type="checkbox"
+                               checked="@IsResultSelected(result.Id)"
+                               @onchange="() => ToggleResultSelection(result.Id)"
+                               @onclick:stopPropagation="true" />
+                    </div>
+                    <div class="grid-cell" data-label="Training Name">@result.TrainingName</div>
+                    <div class="grid-cell" data-label="Project Name">@result.ProjectName</div>
+                    <div class="grid-cell" data-label="Dataset Name">@result.DatasetName</div>
+                    <div class="grid-cell" data-label="Task Type">@result.TaskType</div>
+                    <div class="grid-cell" data-label="Created">@result.CreatedAt.ToString("yyyy-MM-dd HH:mm")</div>
+                    <div class="grid-cell" data-label="Ended">@result.EndedAt?.ToString("yyyy-MM-dd HH:mm")</div>
+                </div>
+            }
+        </div>
+
+        <Pagination CurrentPage="@_paginationState.CurrentPage"
+                    TotalPages="@_paginationState.TotalPages"
+                    ShowPagination="@(_paginationState.TotalPages > 1)"
+                    OnPageChange="HandlePageChange" />
+
+        @if (_selectedResult != null)
+        {
+            <div class="content-divider"></div>
+            <div class="evaluation-details">
+                <div class="details-section">
+                    <div class="train-card">
+                        <h5 class="card-title">Train Info.</h5>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Training Name</span>
+                                <span class="info-value">@_selectedResult.TrainingName</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Project Name</span>
+                                <span class="info-value">@_selectedResult.ProjectName</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Dataset Name</span>
+                                <span class="info-value">@_selectedResult.DatasetName</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Task Type</span>
+                                <span class="info-value">@_selectedResult.TaskType</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Created At</span>
+                                <span class="info-value">@_selectedResult.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Duration</span>
+                                <span class="info-value">@_selectedResult.Duration.ToString(@"hh\:mm\:ss")</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="train-card">
+                        <h5 class="card-title">Label Stats</h5>
+                        <div class="graph-container">
+                            <BarGraph Title="Class Distribution" Data="@_classDistributionData" UseRandomColors="false" BarColors="@_classColors" />
+                            <BarGraph Title="Data Split" Data="@_splitDistributionData" UseRandomColors="false" BarColor="#3498db" />
+                        </div>
+                    </div>
+
+                    <div class="train-card">
+                        <h5 class="card-title">Setting</h5>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Training Name</span>
+                                <span class="info-value">@_selectedResult.TrainingName</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Status</span>
+                                <span class="info-value">@_selectedResult.Status</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="train-card">
+                        <h5 class="card-title">Result</h5>
+                        <div class="metrics-grid">
+                            <div class="metric-item">
+                                <span class="metric-label">Accuracy</span>
+                                <span class="metric-value">@_selectedResult.Metrics.Accuracy.ToString("P2")</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Precision</span>
+                                <span class="metric-value">@_selectedResult.Metrics.Precision.ToString("P2")</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Recall</span>
+                                <span class="metric-value">@_selectedResult.Metrics.Recall.ToString("P2")</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">F1 Score</span>
+                                <span class="metric-value">@_selectedResult.Metrics.F1Score.ToString("P2")</span>
+                            </div>
+                            <div class="placeholder-content">
+                                <p>[ROC Curve 영역]</p>
+                            </div>
+                            <div class="placeholder-content">
+                                <p>[Confusion Matrix 영역]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="next-button-container">
+                    <SnowButton ButtonVariant="@SnowButton.Variant.Filled"
+                                ButtonSize="@SnowButton.Size.Medium"
+                                OnClick="NavigateToDetail">
+                        Next
+                    </SnowButton>
+                </div>
+            </div>
+        }
+    }
+</div>

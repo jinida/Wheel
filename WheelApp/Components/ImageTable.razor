@@ -1,0 +1,54 @@
+@namespace WheelApp.Components
+
+<div class="data-grid" id="image-grid-container">
+    <div class="grid-header">
+        <span class="header-content sortable" @onclick='() => ToggleSort("FileName")'>File Name
+        @if (SortColumn == "FileName")
+        {
+            <span class="sort-indicator">@(SortAscending ? "▲" : "▼")</span>
+        }
+        </span>
+        <div class="column-resizer" data-column="0"></div>
+    </div>
+    <div class="grid-header">
+        <span class="header-content sortable" @onclick='() => ToggleSort("Label")'>@GetLabelColumnName()
+        @if (SortColumn == "Label")
+        {
+            <span class="sort-indicator">@(SortAscending ? "▲" : "▼")</span>
+        }
+        </span>
+        <div class="column-resizer" data-column="1"></div>
+    </div>
+    <div class="grid-header">
+        <span class="header-content sortable" @onclick='() => ToggleSort("Role")'>Role
+        @if (SortColumn == "Role")
+        {
+            <span class="sort-indicator">@(SortAscending ? "▲" : "▼")</span>
+        }
+        </span>
+        <div class="column-resizer" data-column="2"></div>
+    </div>
+    <div class="grid-header">
+        <span class="header-content sortable" @onclick='() => ToggleSort("UploadDate")'>Upload Date
+        @if (SortColumn == "UploadDate")
+        {
+            <span class="sort-indicator">@(SortAscending ? "▲" : "▼")</span>
+        }
+        </span>
+    </div>
+
+    @foreach (var image in Images)
+    {
+        <div id="@($"row-{image.Id}")"
+             class="grid-row @(SelectedImageIds.Contains(image.Id) ? "selected" : "") @(SelectedImage?.Id == image.Id ? "highlighted" : "") @(AnimatingRows.Contains(image.Id) ? "row-updated" : "")"
+             @key="image.Id"
+             @onclick="(e) => HandleRowClick(image, e)"
+             style="cursor: pointer;">
+
+            <div class="grid-cell" data-label="FileName"><span>@image.Name</span></div>
+            <div class="grid-cell" data-label="Label"><span>@GetLabelInfoFromImage(image)</span></div>
+            <div class="grid-cell" data-label="Role"><span>@(image.RoleType?.Name == "None" ? "-" : image.RoleType?.Name)</span></div>
+            <div class="grid-cell" data-label="UploadDate"><span>@image.CreatedAt.ToString("yyyy-MM-dd")</span></div>
+        </div>
+    }
+</div>

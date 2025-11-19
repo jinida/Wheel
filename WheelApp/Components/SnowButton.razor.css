@@ -1,0 +1,146 @@
+.snow-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: var(--18-regular-font-family);
+    font-weight: var(--18-regular-font-weight);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    user-select: none;
+}
+
+    /* --- Size Variants --- */
+    /* Large */
+    .snow-button.size-large {
+        gap: 8px;
+        padding: 16px 24px;
+        border-radius: 16px;
+        font-size: var(--18-regular-font-size);
+    }
+
+        .snow-button.size-large.icon-only {
+            padding: 16px;
+        }
+
+    /* Medium */
+    .snow-button.size-medium {
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-size: var(--14-regular-font-size);
+    }
+
+        .snow-button.size-medium.icon-only {
+            padding: 8px;
+        }
+
+        .snow-button.size-medium .img {
+            width: 20px;
+            height: 20px;
+        }
+
+
+    /* Small */
+    .snow-button.size-small {
+        gap: 4px;
+        padding: 4px 8px;
+        border-radius: 8px;
+        font-size: var(--14-regular-font-size);
+    }
+
+        .snow-button.size-small.icon-only {
+            padding: 4px;
+        }
+
+        .snow-button.size-small .img {
+            width: 16px;
+            height: 16px;
+        }
+
+
+    /* --- Style Variants --- */
+
+    /* 1. Filled */
+    .snow-button.variant-filled {
+        background-color: #1c1c1c;
+        color: #ffffff;
+    }
+
+        .snow-button.variant-filled:hover:not(:disabled) {
+            background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), #1c1c1c;
+        }
+
+        .snow-button.variant-filled .img {
+            filter: brightness(0) invert(1);
+        }
+
+
+    /* 2. Light */
+    .snow-button.variant-light {
+        background-color: #1c1c1c0d;
+        color: #1c1c1c;
+    }
+
+        .snow-button.variant-light:hover:not(:disabled) {
+            background-color: #1c1c1c1a;
+        }
+
+    /* 3. Outlined */
+    .snow-button.variant-outlined {
+        background-color: transparent;
+        border: 1px solid #1c1c1c1a;
+        color: #1c1c1c;
+    }
+
+        .snow-button.variant-outlined:hover:not(:disabled) {
+            border-color: #1c1c1c66;
+            background-color: #1c1c1c0d;
+        }
+
+    /* 4. Plain */
+    .snow-button.variant-plain {
+        background-color: transparent;
+        color: #1c1c1c;
+    }
+
+        .snow-button.variant-plain:hover:not(:disabled) {
+            background-color: #1c1c1c0d;
+        }
+
+    /* --- Disabled State --- */
+    .snow-button:disabled {
+        color: #1c1c1c1a;
+        cursor: not-allowed;
+        background-color: transparent;
+        border-color: transparent;
+    }
+
+    .snow-button.variant-light:disabled {
+        background-color: #1c1c1c0d;
+    }
+
+    .snow-button.variant-outlined:disabled {
+        border-color: #1c1c1c1a;
+    }
+
+    .snow-button.variant-filled:disabled {
+        background-color: #1c1c1c0d;
+        color: #1c1c1c1a;
+    }
+
+    .snow-button:disabled .img {
+        filter: grayscale(100%) opacity(0.3);
+    }
+
+
+    /* --- Icon/Text styles --- */
+    .snow-button .icon-set {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .snow-button .text-wrapper {
+        text-align: center;
+    }

@@ -1,0 +1,120 @@
+.table-container {
+    background-color: #ffffff;
+    padding: 0px;
+}
+
+.data-grid.dataset-grid {
+    display: grid;
+    grid-template-columns: 32px 1.5fr 2fr 1fr 1.2fr 1.2fr 1.2fr 48px;
+    width: 100%;
+}
+
+.grid-header {
+    font-family: var(--12-regular-font-family);
+    font-weight: var(--12-regular-font-weight);
+    color: #1c1c1c66;
+    font-size: var(--12-regular-font-size);
+    padding: 8px 12px;
+    border-bottom: 1px solid #1c1c1c33;
+    text-align: left;
+}
+
+.grid-row {
+    display: contents;
+}
+
+.grid-cell {
+    font-family: var(--12-regular-font-family);
+    font-weight: var(--12-regular-font-weight);
+    color: #1c1c1c;
+    font-size: var(--12-regular-font-size);
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #1c1c1c0d;
+    min-height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.grid-row:hover .grid-cell {
+    background-color: #f7f9fb;
+}
+
+.grid-row.selected .grid-cell {
+    background-color: #f7f9fb;
+}
+
+.grid-row.highlighted .grid-cell {
+    background-color: #e9ecef;
+}
+
+.cell-checkbox {
+    justify-content: center;
+}
+
+.cell-action {
+    justify-content: center;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 992px) {
+    .data-grid.dataset-grid {
+        display: block;
+    }
+
+    .grid-header {
+        display: none;
+    }
+
+    .grid-row {
+        display: block;
+        border: 1px solid #1c1c1c1a;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        padding: 12px;
+    }
+
+        .grid-row.selected {
+            background-color: #f7f9fb;
+            border-color: #1c1c1c33;
+        }
+
+    .grid-cell {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px dotted #1c1c1c1a;
+        white-space: normal;
+        min-height: auto;
+    }
+
+        .grid-cell:last-child {
+            border-bottom: none;
+        }
+
+        .grid-cell::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: #1c1c1c99;
+            margin-right: 16px;
+        }
+
+    .cell-checkbox, .cell-action {
+        justify-content: flex-end;
+    }
+
+        .cell-checkbox::before, .cell-action::before {
+            display: none;
+        }
+}

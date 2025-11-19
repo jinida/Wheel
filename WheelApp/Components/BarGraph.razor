@@ -1,0 +1,40 @@
+<div class="chart-container" @attributes="AdditionalAttributes">
+    <div class="chart-header">
+        <div class="chart-title">@Title</div>
+        <button class="toggle-button" @onclick="TogglePercentageMode">
+            <span>@(_isPercentageMode ? "Count" : "Percentage")</span>
+        </button>
+    </div>
+    <div class="chart-main">
+        <div class="chart-yaxis">
+            @foreach (var label in _yAxisData)
+            {
+                <div class="chart-yaxis-label" style="top: @(label.PositionPercent)%">@label.Text</div>
+            }
+        </div>
+        <div class="chart-plot-area">
+            <div class="chart-grid-lines">
+                @foreach (var line in _yAxisData)
+                {
+                    <div class="chart-grid-line" style="top: @(line.PositionPercent)%"></div>
+                }
+            </div>
+            <div class="chart-bars">
+                @for (int i = 0; i < _processedBars.Count; i++)
+                {
+                    var bar = _processedBars[i];
+                    var index = i;
+                    <div class="chart-bar-wrapper">
+                        <div class="chart-bar" style="height: @(bar.HeightPercent)%; background-color: @(bar.Color);"></div>
+                    </div>
+                }
+            </div>
+            <div class="chart-xaxis">
+                @foreach (var item in Data)
+                {
+                    <div class="chart-xaxis-label">@item.Key</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

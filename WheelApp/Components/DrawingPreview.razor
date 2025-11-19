@@ -1,0 +1,71 @@
+@using WheelApp.Application.DTOs
+
+@* Drawing Preview Component - Shows preview during drawing *@
+
+@* Current drawing preview *@
+@if (CurrentDrawing != null)
+{
+    var color = SelectedColor;
+
+    @if (ProjectType == 1)
+    {
+        var (x, y, width, height) = ImageCanvas.Helpers.GetBboxBounds(CurrentDrawing.Information[0], CurrentDrawing.Information[1]);
+
+        <rect x="@x" y="@y" width="@width" height="@height"
+              fill="@color" fill-opacity="0.2" stroke="@color" stroke-width="2" stroke-dasharray="5,5" />
+    }
+    else if (ProjectType == 2)
+    {
+        @* Filled preview polygon if we have enough points *@
+        @if (CurrentDrawing.Information.Count >= 3 && CurrentMousePosition != null)
+        {
+            var previewPoints = string.Join(" ", CurrentDrawing.Information.Select(p => $"{p.X},{p.Y}")) + $" {CurrentMousePosition.X},{CurrentMousePosition.Y}";
+            <polygon points="@previewPoints"
+                     fill="@color" fill-opacity="0.15" stroke="@color" stroke-width="2" stroke-dasharray="5,5" />
+        }
+        else
+        {
+            var points = string.Join(" ", CurrentDrawing.Information.Select(p => $"{p.X},{p.Y}"));
+            <polyline points="@points"
+                      fill="none" stroke="@color" stroke-width="2" stroke-dasharray="5,5" />
+        }
+
+        @* Preview line from last point to current mouse position *@
+        @if (CurrentMousePosition != null && CurrentDrawing.Information.Count > 0)
+        {
+            var lastPoint = CurrentDrawing.Information[^1];
+            <line x1="@lastPoint.X" y1="@lastPoint.Y" x2="@CurrentMousePosition.X" y2="@CurrentMousePosition.Y"
+                  stroke="@color" stroke-width="2" stroke-dasharray="3,3" opacity="0.7" />
+        }
+
+        @* Show points with special highlight for first point *@
+        @for (int i = 0; i < CurrentDrawing.Information.Count; i++)
+        {
+            var point = CurrentDrawing.Information[i];
+            @if (i == 0)
+            {
+                @* First point - larger and with indicator when near *@
+                <circle cx="@point.X" cy="@point.Y" r="4" fill="@color" stroke="white" stroke-width="2" />
+                @if (IsNearFirstPoint && CurrentDrawing.Information.Count >= 3)
+                {
+                    <circle cx="@point.X" cy="@point.Y" r="8" fill="none" stroke="@color" stroke-width="3" opacity="0.6">
+                        <animate attributeName="r" values="8;12;8" dur="0.8s" repeatCount="indefinite" />
+                    </circle>
+                    @((MarkupString)$"<text x=\"{point.X}\" y=\"{point.Y - 25}\" fill=\"{color}\" font-size=\"11\" font-weight=\"bold\" text-anchor=\"middle\">Click to close</text>")
+                }
+            }
+            else
+            {
+                <circle cx="@point.X" cy="@point.Y" r="2" fill="@color" stroke="white" stroke-width="1" />
+            }
+        }
+    }
+}
+
+@* Drag selection rectangle *@
+@if (IsDraggingSelection && SelectionStartPoint != null && SelectionEndPoint != null)
+{
+    var (selX, selY, selWidth, selHeight) = ImageCanvas.Helpers.GetBboxBounds(SelectionStartPoint, SelectionEndPoint);
+    <rect x="@selX" y="@selY" width="@selWidth" height="@selHeight"
+          fill="#0d6efd" fill-opacity="0.1" stroke="#0d6efd" stroke-width="2" stroke-dasharray="5,5" />
+}

@@ -1,0 +1,48 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <LeftSideBar IsCollapsed="@_isLeftSidebarCollapsed"/>
+    <main>
+        <header class="header">
+            <div class="icon-breadcrumb">
+                <div class="div-2">
+                    <div class="icon-set-wrapper" @onclick="ToggleLeftSidebar" style="cursor: pointer;">
+                        <div class="img-wrapper-2">
+                            <img class="img-2" src="svgs/sidebar.svg" />
+                        </div>
+                    </div>
+                </div>
+                <div class="div-2">
+                    @foreach (var (crumb, index) in _breadcrumbs.Select((item, i) => (item, i)))
+                    {
+                        @if (index > 0)
+                        {
+                            <div class="text"><div class="text-9">/</div></div>
+                        }
+                        <div class="text"><div class="text-10">@crumb</div></div>
+                    }
+                </div>
+            </div>
+            <div class="frame-3">
+                <div class="div-2">
+                    <div class="icon-set-wrapper">
+                        <div class="img-wrapper-2">
+                            <img class="img-2" src="svgs/bell.svg" />
+                        </div>
+                    </div>
+                    <div class="icon-set-wrapper" @onclick="ToggleRightSidebar" style="cursor: pointer;">
+                        <div class="img-wrapper-2">
+                            <img class="img-2" src="svgs/sidebar.svg" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+    <RightSideBar IsCollapsed="@_isRightSidebarCollapsed" />
+</div>
+
+

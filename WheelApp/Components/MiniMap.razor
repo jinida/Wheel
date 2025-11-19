@@ -1,0 +1,10 @@
+@* Mini map showing viewport location when zoomed in *@
+@if (Zoom > 1.0 && IsImageLoaded && !string.IsNullOrEmpty(ImageUrl))
+{
+    <div class="minimap">
+        <img src="@ImageUrl" alt="Minimap" class="minimap-image" />
+        <div class="minimap-viewport" style="left: @GetMinimapLeft()px; top: @GetMinimapTop()px; width: @GetMinimapWidth()px; height: @GetMinimapHeight()px;"></div>
+    </div>
+}
+
+

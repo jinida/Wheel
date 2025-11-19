@@ -1,0 +1,17 @@
+@namespace WheelApp.Components
+@using WheelApp.Pages.WheelDL.Models
+
+@if (Predictions != null && Predictions.Any())
+{
+    @foreach (var prediction in Predictions)
+    {
+        @if (ProjectType == 1 && prediction.BBox != null && prediction.BBox.Length == 4)
+        {
+            @RenderBBoxPrediction(prediction, Zoom)
+        }
+        else if (ProjectType == 2 && prediction.Polygon != null && prediction.Polygon.Length >= 3)
+        {
+            @RenderPolygonPrediction(prediction, Zoom)
+        }
+    }
+}

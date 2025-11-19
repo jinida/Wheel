@@ -1,0 +1,110 @@
+@page "/wheeldl/training/{id}"
+@using WheelApp.Components
+
+<div class="train-page-wrapper">
+    @if (_isCreatingTraining)
+    {
+        <div class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <p>Creating Training...</p>
+        </div>
+    }
+    @if (_isLoading)
+    {
+        <div class="loading-indicator">
+            <p>Loading Training Statistics...</p>
+        </div>
+    }
+    else if (_statistics == null)
+    {
+        <div class="error-message">
+            <p>Failed to load training statistics. Please try again.</p>
+        </div>
+    }
+    else
+    {
+        <div class="train-page-content">
+            <div class="train-card">
+                <h5 class="card-title">Dataset</h5>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Name</span>
+                        <span class="info-value">@_statistics.DatasetName</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Description</span>
+                        <span class="info-value">@_statistics.DatasetDescription</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Task Type</span>
+                        <span class="info-value">@_statistics.TaskType</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Total Images</span>
+                        <span class="info-value">@_statistics.TotalImageCount</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">@GetLabeledImagesLabel()</span>
+                        <span class="info-value">@_statistics.LabeledImageCount</span>
+                    </div>
+                    @if (IsDetectionOrSegmentation())
+                    {
+                        <div class="info-item">
+                            <span class="info-label">Total Annotations</span>
+                            <span class="info-value">@_statistics.TotalAnnotationCount</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Avg. Annotations/Image</span>
+                            <span class="info-value">@GetAverageAnnotationsPerImage()</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="train-card">
+                <h5 class="card-title">Label Stats</h5>
+                <div class="graph-container" style="height: 280px">
+                    <BarGraph Title="@GetClassDistributionTitle()"
+                              Data="@_classDistributionData"
+                              UseRandomColors="false"
+                              BarColors="@_classColors" />
+
+                    <BarGraph Title="Data Split"
+                              Data="@_splitDistributionData"
+                              UseRandomColors="false"
+                              BarColor="#3498db" />
+                </div>
+            </div>
+
+            <div class="train-card">
+                <h5 class="card-title">Setting</h5>
+                <div class="form-group-train">
+                    <label for="trainingName">Training Name</label>
+                    <input class="form-control-train" type="text" id="trainingName" @bind="_trainingName" placeholder="@GetTrainingNamePlaceholder()" />
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            @if (_statistics.Validation.Warnings.Any())
+            {
+                <div class="validation-warnings">
+                    <div class="warning-header">
+                        <span class="warning-icon">⚠</span>
+                        <span class="warning-title">Training cannot be started due to the following issues:</span>
+                    </div>
+                    <ul class="warning-list">
+                        @foreach (var warning in _statistics.Validation.Warnings)
+                        {
+                            <li>@warning</li>
+                        }
+                    </ul>
+                </div>
+            }
+            <div class="footer-buttons">
+                <button class="btn-footer" @onclick="NavigateToPreviousPage">Previous</button>
+                <button class="btn-footer primary" @onclick="StartTraining" disabled="@(!_statistics.Validation.CanStartTraining || string.IsNullOrWhiteSpace(_trainingName))">Start Training</button>
+            </div>
+        </div>
+    }
+</div>

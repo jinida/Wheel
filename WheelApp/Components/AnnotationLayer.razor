@@ -1,0 +1,105 @@
+@using WheelApp.Application.DTOs
+@using WheelApp.Service
+@using WheelApp.Services
+
+@* Annotation Layer Component - Renders all annotations (BBox, Polygon) *@
+
+@foreach (var annotation in Annotations)
+{
+    var isSelected = SelectedAnnotationIds.Contains(annotation.Id);
+    @if (ProjectType == 1)
+    {
+        @if (annotation.Information != null && annotation.Information.Count >= 2)
+        {
+            var (x, y, width, height) = ImageCanvas.Helpers.GetBboxBounds(annotation.Information[0], annotation.Information[1]);
+            var color = annotation.classDto.Color;
+            var strokeWidth = isSelected ? "1.4" : "0.7";
+            var annotationId = annotation.Id;
+
+            @if (isSelected)
+            {
+                <rect x="@(x-2)" y="@(y-2)" width="@(width+4)" height="@(height+4)"
+                      fill="none" stroke="#0d6efd" stroke-width="0.7" opacity="0.5"
+                      style="pointer-events: none; cursor: @(CurrentMode == LabelMode.Select ? "pointer" : "inherit");" />
+            }
+
+            <rect x="@x" y="@y" width="@width" height="@height"
+                  fill="@color" fill-opacity="0.2" stroke="@color" stroke-width="@strokeWidth"
+                  style="pointer-events: @(CurrentMode == LabelMode.Select ? "all" : "none"); cursor: @(CurrentMode == LabelMode.Select ? "move" : "inherit");"
+                  @onmousedown="@((e) => { if (CurrentMode == LabelMode.Select) OnAnnotationMouseDown.InvokeAsync((annotationId, e)); })"
+                  @onmousedown:stopPropagation="true" />
+
+            @* Resize handles for selected bbox *@
+            @if (isSelected)
+            {
+                var handleSize = 6.0 / Zoom; // Adjust handle size based on zoom
+                var halfHandle = handleSize / 2;
+
+                // Corner handles
+                <rect x="@(x - halfHandle)" y="@(y - halfHandle)" width="@handleSize" height="@handleSize"
+                      fill="#0d6efd" stroke="white" stroke-width="1"
+                      style="pointer-events: @(CurrentMode == LabelMode.Select ? "all" : "none"); cursor: @(CurrentMode == LabelMode.Select ? "nw-resize" : "inherit");"
+                      @onmousedown="@((e) => OnStartResizeBBox.InvokeAsync((annotationId, ResizeHandle.TopLeft, e)))"
+                      @onmousedown:stopPropagation="true" />
+
+                <rect x="@(x + width - halfHandle)" y="@(y - halfHandle)" width="@handleSize" height="@handleSize"
+                      fill="#0d6efd" stroke="white" stroke-width="1"
+                      style="pointer-events: @(CurrentMode == LabelMode.Select ? "all" : "none"); cursor: @(CurrentMode == LabelMode.Select ? "ne-resize" : "inherit");"
+                      @onmousedown="@((e) => OnStartResizeBBox.InvokeAsync((annotationId, ResizeHandle.TopRight, e)))"
+                      @onmousedown:stopPropagation="true" />
+
+                <rect x="@(x - halfHandle)" y="@(y + height - halfHandle)" width="@handleSize" height="@handleSize"
+                      fill="#0d6efd" stroke="white" stroke-width="1"
+                      style="pointer-events: @(CurrentMode == LabelMode.Select ? "all" : "none"); cursor: @(CurrentMode == LabelMode.Select ? "sw-resize" : "inherit");"
+                      @onmousedown="@((e) => OnStartResizeBBox.InvokeAsync((annotationId, ResizeHandle.BottomLeft, e)))"
+                      @onmousedown:stopPropagation="true" />
+
+                <rect x="@(x + width - halfHandle)" y="@(y + height - halfHandle)" width="@handleSize" height="@handleSize"
+                      fill="#0d6efd" stroke="white" stroke-width="1"
+                      style="pointer-events: @(CurrentMode == LabelMode.Select ? "all" : "none"); cursor: @(CurrentMode == LabelMode.Select ? "se-resize" : "inherit");"
+                      @onmousedown="@((e) => OnStartResizeBBox.InvokeAsync((annotationId, ResizeHandle.BottomRight, e)))"
+                      @onmousedown:stopPropagation="true" />
+            }
+
+            @((MarkupString)$"<text x=\"{x}\" y=\"{y - 5}\" fill=\"{color}\" font-size=\"12\" font-weight=\"bold\">{System.Net.WebUtility.HtmlEncode(annotation.classDto.Name)}</text>")
+        }
+    }
+    else if (ProjectType == 2)
+    {
+        var color = annotation.classDto.Color;
+        var points = string.Join(" ", annotation.Information.Select(p => $"{p.X},{p.Y}"));
+        var strokeWidth = isSelected ? "4" : "2";
+        var annotationId = annotation.Id;
+
+        @if (isSelected)
+        {
+            <polygon points="@points"
+                     fill="none" stroke="#0d6efd" stroke-width="6" opacity="0.5"
+                     style="pointer-events: none; cursor: @(CurrentMode == LabelMode.Select ? "pointer" : "inherit");" />
+        }
+
+        <polygon points="@points"
+                 fill="@color" fill-opacity="0.3" stroke="@color" stroke-width="@strokeWidth"
+                 style="pointer-events: @(CurrentMode == LabelMode.Select ? "all" : "none"); cursor: @(CurrentMode == LabelMode.Select ? "move" : "inherit");"
+                 @onmousedown="@((e) => { if (CurrentMode == LabelMode.Select) OnAnnotationMouseDown.InvokeAsync((annotationId, e)); })"
+                 @onmousedown:stopPropagation="true" />
+
+        @* Point handles for selected polygon *@
+        @if (isSelected)
+        {
+            var handleRadius = 5.0 / Zoom; // Adjust handle size based on zoom
+
+            @for (int i = 0; i < annotation.Information.Count; i++)
+            {
+                var point = annotation.Information[i];
+                <circle cx="@point.X" cy="@point.Y" r="@handleRadius"
+                        fill="#0d6efd" stroke="white" stroke-width="2"
+                        style="pointer-events: @(CurrentMode == LabelMode.Select ? "all" : "none"); cursor: @(CurrentMode == LabelMode.Select ? "move" : "inherit");"
+                        @onmousedown="@((e) => OnStartMovePolygonPoint.InvokeAsync((annotationId, i, e)))"
+                        @onmousedown:stopPropagation="true" />
+            }
+        }
+
+        @((MarkupString)$"<text x=\"{annotation.Information[0].X}\" y=\"{annotation.Information[0].Y - 5}\" fill=\"{color}\" font-size=\"12\" font-weight=\"bold\">{System.Net.WebUtility.HtmlEncode(annotation.classDto.Name)}</text>")
+    }
+}

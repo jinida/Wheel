@@ -1,0 +1,59 @@
+@using WheelApp.Components
+
+@page "/wheeldl/project/{id}"
+
+<PageTitle>Dataset Details | WheelAD</PageTitle>
+
+<div id="resizable-container" class="resizable-container">
+    <div class="left-panel">
+        <div class="button-wrapper">
+            <InputFile id="import-label-input" OnChange="HandleImportLabel" accept=".json" style="display: none;" />
+            <InputFile id="add-images-input" OnChange="HandleAddImages" accept="image/*" multiple style="display: none;" />
+            <SnowButton ButtonVariant="@SnowButton.Variant.Outlined" ButtonSize="@SnowButton.Size.Small" style="font-size: 12px" OnClick="TriggerImportLabel">Import Label</SnowButton>
+            <SnowButton ButtonVariant="@SnowButton.Variant.Outlined" ButtonSize="@SnowButton.Size.Small" style="font-size: 12px" OnClick="HandleExportLabel">Export Label</SnowButton>
+            <SnowButton ButtonVariant="@SnowButton.Variant.Light" ButtonSize="@SnowButton.Size.Small" style="font-size: 12px" OnClick="TriggerAddImages">Add Images</SnowButton>
+            <SnowButton ButtonVariant="@SnowButton.Variant.Light" ButtonSize="@SnowButton.Size.Small" style="font-size: 12px" OnClick="HandleDeleteImages">Delete Images</SnowButton>
+            @if (_selectedImageIds.Count > 0)
+            {
+                <span class="selection-count">@_selectedImageIds.Count selected</span>
+            }
+        </div>
+        <div class="grid-loading" id="grid-loading-indicator">
+            <div class="loading-spinner"></div>
+            <p>Loading data...</p>
+        </div>
+        <ImageTable Images="@SortedImages"
+                    SelectedImage="@_selectedImage"
+                    SelectedImageIds="@_selectedImageIds"
+                    AnimatingRows="@_animatingRows"
+                    SortColumn="@_sortColumn"
+                    SortAscending="@_sortAscending"
+                    ProjectType="@_workspace?.ProjectType"
+                    OnRowClick="@HandleRowClickFromTable"
+                    OnSortChanged="@ToggleSort" />
+    </div>
+    <div class="splitter"></div>
+    <div class="right-panel">
+        <ImageCanvas @ref="_imageCanvasRef"
+                     SelectedImage="@_selectedImage" 
+                     OnBboxAdded="@HandleBboxAdded"
+                     OnBboxUpdated="@HandleBboxUpdated"
+                     OnSegmentationAdded="@HandleSegmentationAdded"
+                     OnSegmentationUpdated="@HandleSegmentationUpdated"
+                     OnAnnotationRemoved="@HandleAnnotationRemoved"
+                     OnAnnotationsRemovedBatch="@HandleAnnotationsRemovedBatch"
+                     OnImageChanged="@HandleImageChanged" />
+    </div>
+</div>
+
+@if (_isBulkProcessing)
+{
+    <div class="bulk-operation-overlay">
+        <div class="bulk-operation-content">
+            <div class="bulk-operation-spinner"></div>
+            <div class="bulk-operation-text">Processing bulk operation...</div>
+        </div>
+    </div>
+}
+
+<Toast @ref="_toastRef" />

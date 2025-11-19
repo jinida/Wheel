@@ -1,0 +1,245 @@
+﻿@implements IDisposable
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+<div class="leftbar @(IsCollapsed ? "collapsed" : "")">
+    <div class="name-badge">
+        <div class="icon-text">
+            <div class="icon-set" @onclick='() => NavigateTo("/")' style="cursor: pointer;">
+                <img class="img" src="svgs/tire.svg" style="width: 30px;height: 30px" />
+            </div>
+            <div class="text" @onclick='() => NavigateTo("/")' style="cursor: pointer;padding: 0px 10px;">
+                <div class="text-wrapper" style="font-weight: bold; font-size: 20px">Wheel</div>
+            </div>
+        </div>
+    </div>
+    <div class="frame">
+        <div class="div">
+            <div class="div-wrapper"><div class="text-4">Homepage</div></div>
+        </div>
+        <div class="content">
+            <div class="icon-text-2">
+                <div class="icon-set"><img class="img" src="svgs/dot.svg" /></div>
+                <div class="text" @onclick='() => NavigateTo("/overview")' style="cursor: pointer;">
+                    <div class="text-wrapper">Overview</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="frame">
+        <div class="div-wrapper"><div class="text-4">Solution</div></div>
+
+        <div class="content-3" @onclick='()=> ToggleOpen("WheelCV")' style="cursor: pointer;">
+            <div class="group">
+                <div class="img-wrapper"><img class="selected-4" /></div>
+                <div class="icon-set">
+                    <img class="img" src="svgs/@(_isWheelCVOpen ? "arrowlinedown.svg" : "arrowlineright.svg")" />
+                </div>
+            </div>
+            <div class="icon-text-2">
+                <div class="icon-set">
+                    <img class="img-2" src="svgs/eye.svg" />
+                </div>
+                <div class="text"><div class="text-wrapper">WheelCV</div></div>
+            </div>
+        </div>
+        @if (_isWheelCVOpen)
+        {
+            <div class='content-@(IsActive("/wheelcv") ? "2" : "3")' @onclick='() => NavigateTo("/wheelcv")' style="cursor: pointer;">
+                @if (IsActive("/wheelcv"))
+                {
+                    <div class="icon-set">
+                        <img class="img-2" src="svgs/selected.svg" />
+                    </div>
+                }
+                <div class="icon-text-2">
+                    <div class="img-wrapper"><img class="identification-badge-2" /></div>
+                    <div class="text" style="@(IsActive("/wheelcv") ? "" : "padding-left: 20px;")"><div class="text-wrapper">Overview</div></div>
+                </div>
+            </div>
+            <div class='content-@(IsActive("/wheelcv/datasets") ? "2" : "3")' @onclick='() => NavigateTo("/wheelcv/datasets")' style="cursor: pointer;">
+                @if (IsActive("/wheelcv/datasets"))
+                {
+                    <div class="icon-set">
+                        <img class="img-2" src="svgs/selected.svg" />
+                    </div>
+                }
+                <div class="icon-text-2">
+                    <div class="img-wrapper"><img class="identification-badge-2" /></div>
+                    <div class="text" style="@(IsActive("/wheelcv/datasets") ? "" : "padding-left: 20px;")"><div class="text-wrapper">Projects</div></div>
+                </div>
+            </div>
+        }
+
+        <div class="content-3" @onclick='()=> ToggleOpen("WheelDL")' style="cursor: pointer;">
+            <div class="group">
+                <div class="img-wrapper"><img class="selected-4" /></div>
+                <div class="icon-set">
+                    <img class="img" src="svgs/@(_isWheelDLOpen ? "arrowlinedown.svg" : "arrowlineright.svg")" />
+                </div>
+            </div>
+            <div class="icon-text-2">
+                <div class="icon-set">
+                    <img class="img-2" src="svgs/foldernotch.svg" />
+                </div>
+                <div class="text"><div class="text-wrapper">WheelDL</div></div>
+            </div>
+        </div>
+        @if (_isWheelDLOpen)
+        {
+            <div class='content-@(IsActive("/wheeldl") ? "2" : "3")' @onclick='() => NavigateTo("/wheeldl")' style="cursor: pointer;">
+                @if (IsActive("/wheeldl"))
+                {
+                    <div class="icon-set">
+                        <img class="img-2" src="svgs/selected.svg" />
+                    </div>
+                }
+                <div class="icon-text-2">
+                    <div class="img-wrapper"><img class="identification-badge-2" /></div>
+                    <div class="text" style="@(IsActive("/wheeldl") ? "" : "padding-left: 20px;")"><div class="text-wrapper">Overview</div></div>
+                </div>
+            </div>
+            <div class='content-@(IsActive("/wheeldl/datasets") ? "2" : "3")' @onclick='() => NavigateTo("/wheeldl/datasets")' style="cursor: pointer;">
+                @if (IsActive("/wheeldl/datasets"))
+                {
+                    <div class="icon-set">
+                        <img class="img-2" src="svgs/selected.svg" />
+                    </div>
+                }
+                <div class="icon-text-2">
+                    <div class="img-wrapper"><img class="identification-badge-2" /></div>
+                    <div class="text" style="@(IsActive("/wheeldl/datasets") ? "" : "padding-left: 20px;")"><div class="text-wrapper">Datasets</div></div>
+                </div>
+            </div>
+            <div class='content-@(IsActive("/wheeldl/evaluates") ? "2" : "3")' @onclick='() => NavigateTo("/wheeldl/evaluates")' style="cursor: pointer;">
+                @if (IsActive("/wheeldl/evaluates"))
+                {
+                    <div class="icon-set">
+                        <img class="img-2" src="svgs/selected.svg" />
+                    </div>
+                }
+                <div class="icon-text-2">
+                    <div class="img-wrapper"><img class="identification-badge-2" /></div>
+                    <div class="text" style="@(IsActive("/wheeldl/evaluates") ? "" : "padding-left: 20px;")"><div class="text-wrapper">Evaluates</div></div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="frame">
+        <div class="div-wrapper"><div class="text-4">Pages</div></div>
+        <div class="content-3" @onclick='()=> ToggleOpen("UserProfile")' style="cursor: pointer;">
+            <div class="group">
+                <div class="img-wrapper"><img class="selected-4" /></div>
+                <div class="icon-set">
+                    <img class="img" src="svgs/@(_isUserProfileOpen ? "arrowlinedown.svg" : "arrowlineright.svg")" />
+                </div>
+            </div>
+            <div class="icon-text-2">
+                <div class="icon-set">
+                    <img class="img-2" src="svgs/identificationbadge.svg" />
+                </div>
+                <div class="text"><div class="text-wrapper">User Profile</div></div>
+            </div>
+        </div>
+        @if (_isUserProfileOpen)
+        {
+            <div class='content-@(IsActive("/user/profile") ? "2" : "3")' @onclick='() => NavigateTo("/user/profile")' style="cursor: pointer;">
+                @if (IsActive("/user/profile"))
+                {
+                    <div class="icon-set">
+                        <img class="img-2" src="svgs/selected.svg" />
+                    </div>
+                }
+                <div class="icon-text-2">
+                    <div class="img-wrapper"><img class="identification-badge-2" /></div>
+                    <div class="text" style="@(IsActive("/user/profile") ? "" : "padding-left: 20px;")"><div class="text-wrapper">Profile</div></div>
+                </div>
+            </div>
+            <div class='content-@(IsActive("/user/projects") ? "2" : "3")' @onclick='() => NavigateTo("/user/projects")' style="cursor: pointer;">
+                @if (IsActive("/user/projects"))
+                {
+                    <div class="icon-set">
+                        <img class="img-2" src="svgs/selected.svg" />
+                    </div>
+                }
+                <div class="icon-text-2">
+                    <div class="img-wrapper"><img class="identification-badge-2" /></div>
+                    <div class="text" style="@(IsActive("/user/projects") ? "" : "padding-left: 20px;")"><div class="text-wrapper">Projects</div></div>
+                </div>
+            </div>
+        }
+        <div class="content-3" @onclick='()=> ToggleOpen("Blog")' style="cursor: pointer;">
+            <div class="group">
+                <div class="img-wrapper"><img class="selected-12" /></div>
+                <div class="icon-set">
+                    <img class="img" src="svgs/@(_isBlogOpen ? "arrowlinedown.svg" : "arrowlineright.svg")" />
+                </div>
+            </div>
+            <div class="icon-text-2">
+                <div class="icon-set">
+                    <img class="img-2" src="svgs/notebook.svg" />
+                </div>
+                <div class="text"><div class="text-wrapper">Blog</div></div>
+            </div>
+        </div>
+        @if (_isBlogOpen)
+        {
+            <div class='content-@(IsActive("/blog/contents") ? "2" : "3")' @onclick='() => NavigateTo("/blog/contents")' style="cursor: pointer;">
+                @if (IsActive("/blog/contents"))
+                {
+                    <div class="icon-set">
+                        <img class="img-2" src="svgs/selected.svg" />
+                    </div>
+                }
+                <div class="icon-text-2">
+                    <div class="img-wrapper"><img class="identification-badge-2" /></div>
+                    <div class="text" style="@(IsActive("/blog/contents") ? "" : "padding-left: 20px;")"><div class="text-wrapper">Contents</div></div>
+                </div>
+            </div>
+            <div class='content-@(IsActive("/blog/papers") ? "2" : "3")' @onclick='() => NavigateTo("/blog/papers")' style="cursor: pointer;">
+                @if (IsActive("/blog/papers"))
+                {
+                    <div class="icon-set">
+                        <img class="img-2" src="svgs/selected.svg" />
+                    </div>
+                }
+                <div class="icon-text-2">
+                    <div class="img-wrapper"><img class="identification-badge-2" /></div>
+                    <div class="text" style="@(IsActive("/blog/papers") ? "" : "padding-left: 20px;")"><div class="text-wrapper">Papers</div></div>
+                </div>
+            </div>
+        }
+
+        <div class='content-@(IsActive("/resume") ? "2" : "3")' @onclick='() => NavigateTo("/resume")' style="cursor: pointer;">
+            <div class="icon-text-2" style="@(IsActive("/resume") ? "" : "padding: 0px 0px 0px 20px")">
+                @if (IsActive("/resume"))
+                {
+                    <div class="icon-set">
+                        <img class="img-2" src="svgs/selected.svg" />
+                    </div>
+                }
+                <div class="icon-set">
+                    <img class="img-2" src="svgs/identificationcard.svg" />
+                </div>
+                <div class="text"><div class="text-wrapper">Resume</div></div>
+            </div>
+        </div>
+        <div class='content-@(IsActive("/portfolio") ? "2" : "3")' @onclick='() => NavigateTo("/portfolio")' style="cursor: pointer;">
+            <div class="icon-text-2" style="@(IsActive("/portfolio") ? "" : "padding: 0px 0px 0px 20px")">
+                @if (IsActive("/portfolio"))
+                {
+                    <div class="icon-set">
+                        <img class="img-2" src="svgs/selected.svg" />
+                    </div>
+                }
+
+                <div class="icon-set">
+                    <img class="img-2" src="svgs/chatsteardrop.svg" />
+                </div>
+                <div class="text"><div class="text-wrapper">Portfolio</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+

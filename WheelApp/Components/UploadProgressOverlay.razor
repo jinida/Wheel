@@ -1,0 +1,38 @@
+@namespace WheelApp.Components
+
+@if (IsVisible)
+{
+    <div class="upload-progress-overlay">
+        <div class="upload-progress-content">
+            <div class="circular-progress">
+                <svg class="progress-ring" width="120" height="120">
+                    <circle class="progress-ring-circle-bg"
+                            stroke="#e0e0e0"
+                            stroke-width="8"
+                            fill="transparent"
+                            r="52"
+                            cx="60"
+                            cy="60"/>
+                    <circle class="progress-ring-circle"
+                            stroke="#2196f3"
+                            stroke-width="8"
+                            fill="transparent"
+                            r="52"
+                            cx="60"
+                            cy="60"
+                            style="stroke-dasharray: @CircumferencePx; stroke-dashoffset: @OffsetPx;"/>
+                </svg>
+                <div class="progress-percentage">@ProgressPercentage%</div>
+            </div>
+            <div class="progress-text">@ProgressMessage</div>
+            @if (TotalFiles > 0)
+            {
+                <div class="progress-details">@UploadedFiles / @TotalFiles files</div>
+            }
+        </div>
+    </div>
+}
+
+
+
+

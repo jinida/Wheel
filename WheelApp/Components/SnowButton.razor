@@ -1,0 +1,24 @@
+@* SnowButton - Reusable button component with variants and sizes *@
+
+<button class="@_cssClass" disabled="@Disabled" @onclick="OnClick" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrWhiteSpace(LeadingIconUrl))
+    {
+        <span class="icon-set">
+            <img class="img" src="@LeadingIconUrl" />
+        </span>
+    }
+
+    @if (ChildContent != null)
+    {
+        <span class="text">
+            <span class="text-wrapper">@ChildContent</span>
+        </span>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(TrailingIconUrl))
+    {
+        <span class="icon-set">
+            <img class="img" src="@TrailingIconUrl" />
+        </span>
+    }
+</button>

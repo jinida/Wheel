@@ -1,0 +1,104 @@
+@page "/wheeldl/datasets"
+@using WheelApp.Application.DTOs
+@using WheelApp.Components
+@using WheelApp.State
+@inject NavigationManager NavigationManager
+
+<div class="list-container">
+    <h1 class="list-title">Datasets</h1>
+
+    <div class="button-wrapper" style="margin: 6px;">
+        <SnowButton ButtonVariant="@SnowButton.Variant.Light"
+                    ButtonSize="@SnowButton.Size.Medium"
+                    OnClick="@(() => _modalManager.Show(ModalManager.ModalKeys.CreateDataset))">
+            New Dataset
+        </SnowButton>
+        <SnowButton ButtonVariant="@SnowButton.Variant.Light"
+                    ButtonSize="@SnowButton.Size.Medium"
+                    style="margin: 0px 0px 0px 4px;"
+                    OnClick="DeleteSelectedDatasets"
+                    Disabled="@(!_datasetSelection.HasSelection)">
+            Delete Dataset
+        </SnowButton>
+    </div>
+
+    <DatasetTable Datasets="@_datasets"
+                  SelectionState="@_datasetSelection"
+                  CurrentPage="@_datasetPagination.CurrentPage"
+                  TotalPages="@_datasetPagination.TotalPages"
+                  ShowPagination="true"
+                  OnRowDoubleClick="@HandleDatasetDoubleClick"
+                  OnRowSelectionToggle="@HandleDatasetSelectionToggle"
+                  OnToggleAllRows="@HandleToggleAllDatasets"
+                  OnEditClick="@ShowEditDatasetModal"
+                  OnPageChange="@ChangeDatasetPage" />
+</div>
+
+@if (_datasetSelection.HighlightedId.HasValue)
+{
+    <div class="list-container" style="margin-top: 1rem;">
+        <h1 class="list-title">Projects</h1>
+        <div class="button-wrapper" style="margin: 6px;">
+            <SnowButton ButtonVariant="@SnowButton.Variant.Light"
+                        ButtonSize="@SnowButton.Size.Medium"
+                        OnClick="@(() => { _modalManager.Show(ModalManager.ModalKeys.CreateProject); _projectModalRef?.ClearFiles(); })">
+                New Project
+            </SnowButton>
+            <SnowButton ButtonVariant="@SnowButton.Variant.Light"
+                        ButtonSize="@SnowButton.Size.Medium"
+                        style="margin: 0px 0px 0px 4px;"
+                        OnClick="DeleteSelectedProjects"
+                        Disabled="@(!_projectSelection.HasSelection)">
+                Delete Project
+            </SnowButton>
+        </div>
+
+        <ProjectTable Projects="@_projects"
+                      SelectionState="@_projectSelection"
+                      PaginationState="@_projectPagination"
+                      OnRowDoubleClick="@((id) => _projectSelection.ToggleHighlight(id))"
+                      OnRowSelectionToggle="@HandleProjectSelectionToggle"
+                      OnToggleAllRows="@HandleToggleAllProjects"
+                      OnEditClick="@ShowEditProjectModal"
+                      OnPageChange="@ChangeProjectPage" />
+    </div>
+}
+
+@if (_projectSelection.HighlightedId.HasValue)
+{
+    <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+        <SnowButton ButtonVariant="@SnowButton.Variant.Filled"
+                    ButtonSize="@SnowButton.Size.Medium"
+                    OnClick="HandleNextButtonClick"
+                    TrailingIconUrl="svgs/arrow-right.svg">
+            Next
+        </SnowButton>
+    </div>
+}
+
+<DatasetModal @ref="_datasetModalRef"
+              IsVisible="@_isDatasetModalVisible"
+              OnSubmit="HandleDatasetCreated"
+              OnCancel="HideCreateDatasetModal" />
+
+<ProjectModal @ref="_projectModalRef"
+              IsVisible="@_isProjectModalVisible"
+              OnSubmit="HandleProjectCreated"
+              OnCancel="HideCreateProjectModal" />
+
+<EditDatasetModal @ref="_editDatasetModalRef"
+                  IsVisible="@_isEditDatasetModalVisible"
+                  OnSubmit="HandleDatasetUpdated"
+                  OnCancel="HideEditDatasetModal" />
+
+<EditProjectModal @ref="_editProjectModalRef"
+                  IsVisible="@_isEditProjectModalVisible"
+                  OnSubmit="HandleProjectUpdated"
+                  OnCancel="HideEditProjectModal" />
+
+<UploadProgressOverlay IsVisible="@_isUploading"
+                       ProgressMessage="@_uploadProgress"
+                       UploadedFiles="@_uploadedCount"
+                       TotalFiles="@_totalFiles" />
+
+<Toast @ref="_toastRef" />

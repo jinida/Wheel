@@ -1,0 +1,44 @@
+@namespace WheelApp.Components
+
+<div class="data-grid" id="evaluate-grid-container">
+    <div class="grid-header">
+        <span class="header-content sortable" @onclick='() => ToggleSort("FileName")'>File Name
+        @if (SortColumn == "FileName")
+        {
+            <span class="sort-indicator">@(SortAscending ? "▲" : "▼")</span>
+        }
+        </span>
+        <div class="column-resizer" data-column="0"></div>
+    </div>
+    <div class="grid-header">
+        <span class="header-content sortable" @onclick='() => ToggleSort("Label")'>Label
+        @if (SortColumn == "Label")
+        {
+            <span class="sort-indicator">@(SortAscending ? "▲" : "▼")</span>
+        }
+        </span>
+        <div class="column-resizer" data-column="1"></div>
+    </div>
+    <div class="grid-header">
+        <span class="header-content sortable" @onclick='() => ToggleSort("Prediction")'>Prediction
+        @if (SortColumn == "Prediction")
+        {
+            <span class="sort-indicator">@(SortAscending ? "▲" : "▼")</span>
+        }
+        </span>
+    </div>
+
+    @foreach (var image in Images)
+    {
+        <div id="@($"row-{image.Id}")"
+             class="grid-row @(SelectedImage?.Id == image.Id ? "highlighted" : "")"
+             @key="image.Id"
+             @onclick="(e) => HandleRowClick(image, e)"
+             style="cursor: pointer;">
+
+            <div class="grid-cell" data-label="FileName"><span>@image.Name</span></div>
+            <div class="grid-cell" data-label="Label"><span>@GetLabelFromImage(image)</span></div>
+            <div class="grid-cell" data-label="Prediction"><span>@GetMockPrediction(image)</span></div>
+        </div>
+    }
+</div>

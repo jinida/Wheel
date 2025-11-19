@@ -1,0 +1,50 @@
+@if (Position == ControlPosition.Top)
+{
+    @* Top row: Zoom controls *@
+    <div class="controls-top-row">
+        <div class="zoom-controls-external">
+            <button class="ctrl-btn" @onclick="OnZoomOut">−</button>
+            <input type="range" min="25" max="500" step="25" value="@((int)(Zoom * 100))"
+                   @oninput="@((e) => OnZoomChanged.InvokeAsync(double.Parse(e.Value!.ToString()!) / 100.0))"
+                   class="ctrl-slider" />
+            <span class="ctrl-value">@($"{Zoom:P0}")</span>
+            <button class="ctrl-btn" @onclick="OnZoomIn">+</button>
+            <button class="ctrl-btn-reset" @onclick="OnResetZoom">⟲</button>
+        </div>
+    </div>
+}
+else
+{
+    @* Bottom row: Image adjustment controls *@
+    <div class="controls-bottom-row">
+        <div class="brightness-controls-external">
+            <div class="ctrl-group">
+                <label class="ctrl-label">B</label>
+                <input type="range" min="50" max="150" step="5" value="@Brightness"
+                       @oninput="@((e) => OnBrightnessChanged.InvokeAsync(double.Parse(e.Value!.ToString()!)))"
+                       class="ctrl-slider" />
+                <span class="ctrl-value">@Brightness%</span>
+            </div>
+
+            <div class="ctrl-group">
+                <label class="ctrl-label">G</label>
+                <input type="range" min="50" max="200" step="10" value="@((int)(Gamma * 100))"
+                       @oninput="@((e) => OnGammaChanged.InvokeAsync(double.Parse(e.Value!.ToString()!) / 100.0))"
+                       class="ctrl-slider" />
+                <span class="ctrl-value">@Gamma.ToString("F2")</span>
+            </div>
+
+            <div class="ctrl-group">
+                <label class="ctrl-label">C</label>
+                <input type="range" min="50" max="150" step="5" value="@Contrast"
+                       @oninput="@((e) => OnContrastChanged.InvokeAsync(double.Parse(e.Value!.ToString()!)))"
+                       class="ctrl-slider" />
+                <span class="ctrl-value">@Contrast%</span>
+            </div>
+
+            <button class="ctrl-btn-reset" @onclick="OnResetAdjustments" title="Reset Image Adjustments">⟲</button>
+        </div>
+    </div>
+}
+
+

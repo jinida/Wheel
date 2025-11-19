@@ -1,0 +1,546 @@
+.leftbar {
+    display: flex;
+    flex-direction: column;
+    width: 240px;
+    height: 100%;
+    flex-shrink: 0;
+    padding: 20px 16px;
+    border-right: 1px solid #e0e0e0;
+    background-color: #f8f9fa;
+    transition: width 0.3s ease-in-out, padding 0.3s ease-in-out;
+    overflow-x: hidden;
+}
+
+.leftbar.collapsed {
+    width: 60px;
+    padding-left: 5px;
+    padding-right: 0;
+}
+
+.leftbar.collapsed .text-wrapper,
+.leftbar.collapsed .text-4 {
+    display: none;
+}
+
+.leftbar.collapsed .icon-text,
+.leftbar.collapsed .icon-text-2 {
+    justify-content: center;
+    padding: 0;
+}
+
+.leftbar.collapsed .icon-set {
+    margin-right: 0;
+}
+
+.leftbar.collapsed .group{
+    display: none;
+}
+
+.leftbar.collapsed .div-wrapper {
+    display: none;
+}
+
+.leftbar.collapsed .frame {
+    padding: 0;
+    margin: 0;
+    display: none;
+}
+
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 4px 8px;
+}
+
+.name-badge {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 8px;
+    padding: 4px 4px 18px;
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+    flex: 0 0 auto;
+    border-radius: 8px;
+}
+
+.icon-text {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 0px;
+    flex: 1;
+    flex-grow: 1;
+    border-radius: 8px;
+    align-items: center;
+    position: relative;
+}
+
+.icon-text-2 {
+    display: flex;
+    align-items: center;
+    gap: 4px 4px;
+    flex: 1;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    position: relative;
+    border-radius: 8px;
+}
+
+.icon-set {
+    display: inline-flex;
+    justify-content: center;
+    flex: 0 0 auto;
+    border-radius: 8px;
+    align-items: center;
+    position: relative;
+}
+
+.icon-set-wrapper {
+    padding: 4px;
+    position: relative;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border-radius: 8px;
+}
+
+.bye-wind {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border-radius: 80px;
+}
+
+.text-wrapper {
+    position: relative;
+    align-self: stretch;
+    margin-top: -1.00px;
+    color: #1c1c1c;
+    font-family: var(--14-regular-font-family);
+    font-weight: var(--14-regular-font-weight);
+    font-size: var(--14-regular-font-size);
+    letter-spacing: var(--14-regular-letter-spacing);
+    line-height: var(--14-regular-line-height);
+    font-style: var(--14-regular-font-style);
+}
+
+.text-2 {
+    position: relative;
+    align-self: stretch;
+    margin-top: -1.00px;
+    font-family: var(--14-regular-font-family);
+    font-weight: var(--14-regular-font-weight);
+    color: #1c1c1c66;
+    font-size: var(--14-regular-font-size);
+    text-align: center;
+    letter-spacing: var(--14-regular-letter-spacing);
+    line-height: var(--14-regular-line-height);
+    font-style: var(--14-regular-font-style);
+}
+
+.content-2 {
+    gap: 4px 4px;
+    padding: 4px 8px 4px 0px;
+    background-color: #1c1c1c0d;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+    flex: 0 0 auto;
+    border-radius: 8px;
+}
+
+.group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0px -12px;
+    border-radius: 8px;
+    align-items: center;
+    position: relative;
+    flex: 0 0 auto;
+}
+
+.img-wrapper {
+    opacity: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex: 0 0 auto;
+    border-radius: 8px;
+}
+
+.text {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    position: relative;
+    flex: 0 0 auto;
+    border-radius: 8px;
+}
+
+.text-3 {
+    position: relative;
+    align-self: stretch;
+    margin-top: -1.00px;
+    font-family: var(--14-regular-font-family);
+    font-weight: var(--14-regular-font-weight);
+    color: #1c1c1c33;
+    font-size: var(--14-regular-font-size);
+    text-align: center;
+    letter-spacing: var(--14-regular-letter-spacing);
+    line-height: var(--14-regular-line-height);
+    font-style: var(--14-regular-font-style);
+}
+
+.text-4 {
+    position: relative;
+    align-self: stretch;
+    margin-top: -1.00px;
+    font-family: var(--14-regular-font-family);
+    font-weight: var(--14-regular-font-weight);
+    color: #1c1c1c66;
+    font-size: var(--14-regular-font-size);
+    letter-spacing: var(--14-regular-letter-spacing);
+    line-height: var(--14-regular-line-height);
+    font-style: var(--14-regular-font-style);
+}
+
+.frame {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 0px 0px 18px;
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+    flex: 0 0 auto;
+}
+
+.name-badge.active-manual::before,
+.content.active-manual::before,
+.content-2.active-manual::before,
+.content-3.active-manual::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 60%;
+    background-color: #333; /* 막대 색상 */
+    border-radius: 2px;
+}
+
+.icon-text-2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.button {
+    all: unset;
+    box-sizing: border-box;
+    padding: 4px 8px;
+    position: relative;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border-radius: 8px;
+}
+
+.div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 8px;
+    align-self: stretch;
+    width: 100%;
+    border-radius: 8px;
+    align-items: center;
+    position: relative;
+    flex: 0 0 auto;
+}
+
+.img {
+    position: relative;
+    width: 16px;
+    height: 16px;
+}
+
+.img-2 {
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+.content-3 {
+    gap: 4px 4px;
+    padding: 4px 8px 4px 0px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+    flex: 0 0 auto;
+    border-radius: 8px;
+}
+
+.selected-2 {
+    margin-bottom: -787.00px;
+    margin-right: -1271.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+.selected-3 {
+    margin-bottom: -755.00px;
+    margin-right: -1271.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+.selected-4 {
+    margin-bottom: -667.00px;
+    margin-right: -1271.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+.arrow-line-down {
+    margin-bottom: -633.00px;
+    margin-right: -1263.00px;
+    position: relative;
+    width: 16px;
+    height: 16px;
+}
+
+.identification-badge {
+    /*margin-bottom: -635.00px;*/
+    position: relative;
+    width: 20px;
+    height: 20px;
+    /*margin-right: -1243.00px;*/
+}
+
+ .selected-5 {
+    margin-bottom: -635.00px;
+    margin-right: -1271.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+ .selected-6 {
+    margin-bottom: -603.00px;
+    margin-right: -1271.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+ .arrow-line-down-2 {
+    margin-bottom: -601.00px;
+    margin-right: -1263.00px;
+    position: relative;
+    width: 16px;
+    height: 16px;
+}
+
+ .identification-badge-2 {
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+ .selected-7 {
+    margin-bottom: -571.00px;
+    margin-right: -1271.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+ .arrow-line-down-3 {
+    margin-bottom: -569.00px;
+    margin-right: -1263.00px;
+    position: relative;
+    width: 16px;
+    height: 16px;
+}
+
+ .identification-badge-3 {
+    margin-bottom: -571.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    margin-right: -1243.00px;
+}
+
+ .selected-8 {
+    margin-bottom: -539.00px;
+    margin-right: -1271.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+ .arrow-line-down-4 {
+    margin-bottom: -537.00px;
+    margin-right: -1263.00px;
+    position: relative;
+    width: 16px;
+    height: 16px;
+}
+
+ .identification-badge-4 {
+    margin-bottom: -539.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    margin-right: -1243.00px;
+}
+
+ .selected-9 {
+    margin-bottom: -507.00px;
+    margin-right: -1271.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+ .arrow-line-down-5 {
+    margin-bottom: -505.00px;
+    margin-right: -1263.00px;
+    position: relative;
+    width: 16px;
+    height: 16px;
+}
+
+ .identification-badge-5 {
+    margin-bottom: -507.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    margin-right: -1243.00px;
+}
+
+ .selected-10 {
+    margin-bottom: -475.00px;
+    margin-right: -1271.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+ .selected-11 {
+    margin-bottom: -443.00px;
+    margin-right: -1271.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+ .selected-12 {
+    margin-bottom: -411.00px;
+    margin-right: -1271.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+ .selected-13 {
+    margin-bottom: -379.00px;
+    margin-right: -1271.00px;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+
+
+ .snowui-logo {
+    position: relative;
+    width: 74px;
+    height: 20px;
+}
+
+ .snowui-logo-2 {
+    position: absolute;
+    width: 50px;
+    height: 9px;
+    top: 6px;
+    left: 24px;
+}
+
+ .union {
+    position: absolute;
+    width: 11px;
+    height: 9px;
+    top: 0;
+    left: 39px;
+}
+
+ .union-2 {
+    position: absolute;
+    width: 37px;
+    height: 9px;
+    top: 0;
+    left: 0;
+}
+
+ .overlap-group-wrapper {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 0;
+    left: 0;
+}
+
+ .overlap-group {
+    position: relative;
+    height: 20px;
+}
+
+ .rectangle {
+    position: absolute;
+    width: 20px;
+    height: 6px;
+    top: 7px;
+    left: 0;
+}
+
+ .rectangle-2 {
+    position: absolute;
+    width: 6px;
+    height: 20px;
+    top: 0;
+    left: 7px;
+}
+
+ .rectangle-3 {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 2px;
+    left: 2px;
+}
+
+ .union-3 {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    top: 3px;
+    left: 3px;
+}

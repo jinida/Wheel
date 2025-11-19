@@ -1,0 +1,8 @@
+@* Coordinate Display Component - Shows mouse coordinates on image *@
+
+@if (Show && MouseX.HasValue && MouseY.HasValue)
+{
+    <div class="coordinate-display">
+        (@MouseX.Value, @MouseY.Value)
+    </div>
+}

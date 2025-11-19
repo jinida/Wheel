@@ -1,0 +1,229 @@
+.evaluation-details {
+    margin-top: 24px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    overflow-y: auto;
+    flex-grow: 1;
+    font-family: var(--14-regular-font-family);
+    font-weight: var(--14-regular-font-weight);
+    font-size: var(--14-regular-font-size);
+    letter-spacing: var(--14-regular-letter-spacing);
+    line-height: var(--14-regular-line-height);
+    font-style: var(--14-regular-font-style);
+}
+
+.details-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.train-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+}
+
+
+.info-grid {
+    gap: 16px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.info-label {
+    color: #6c757d;
+}
+
+.info-value {
+    font-weight: 500;
+}
+
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.metric-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+}
+
+.metric-label {
+    font-weight: 500;
+    color: #6c757d;
+}
+
+.metric-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.placeholder-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    color: #adb5bd;
+}
+
+
+.data-grid {
+    display: grid;
+    grid-template-columns: 48px 2fr 1.5fr 1.5fr 1fr 1.2fr 1.2fr;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.grid-header {
+    font-family: var(--12-regular-font-family);
+    font-weight: var(--12-regular-font-weight);
+    color: #1c1c1c66;
+    font-size: var(--12-regular-font-size);
+    padding: 8px 12px;
+    border-bottom: 1px solid #1c1c1c33;
+    text-align: left;
+}
+
+.grid-row {
+    display: contents;
+}
+
+.grid-cell {
+    font-family: var(--12-regular-font-family);
+    font-weight: var(--12-regular-font-weight);
+    color: #1c1c1c;
+    font-size: var(--12-regular-font-size);
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #1c1c1c0d;
+    min-height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.grid-row:hover .grid-cell {
+    background-color: #f7f9fb;
+}
+
+.grid-row.selected .grid-cell {
+    background-color: #f7f9fb;
+}
+
+.grid-row.highlighted .grid-cell {
+    background-color: #e9ecef;
+}
+
+.cell-checkbox {
+    justify-content: center;
+}
+
+.cell-action {
+    justify-content: center;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 992px) {
+    .data-grid {
+        display: block;
+    }
+
+    .grid-header {
+        display: none;
+    }
+
+    .grid-row {
+        display: block;
+        border: 1px solid #1c1c1c1a;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        padding: 12px;
+    }
+
+        .grid-row.selected {
+            background-color: #f7f9fb;
+            border-color: #1c1c1c33;
+        }
+
+    .grid-cell {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px dotted #1c1c1c1a;
+        white-space: normal;
+        min-height: auto;
+    }
+
+        .grid-cell:last-child {
+            border-bottom: none;
+        }
+
+        .grid-cell::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: #1c1c1c99;
+            margin-right: 16px;
+        }
+
+    .cell-checkbox, .cell-action {
+        justify-content: flex-end;
+    }
+
+        .cell-checkbox::before, .cell-action::before {
+            display: none;
+        }
+}
+
+
+.graph-container {
+    display: flex;
+    gap: 24px;
+    height: 280px;
+}
+
+    .graph-container > * {
+        flex: 1;
+        min-width: 0;
+        min-height: 0;
+    }
+
+.content-divider {
+    height: 2px;
+    background: linear-gradient(to right, #e0e0e0 0%, #e0e0e0 100%);
+    margin: 24px 0;
+    border: none;
+}
+
+.next-button-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 0;
+    margin-top: 16px;
+}

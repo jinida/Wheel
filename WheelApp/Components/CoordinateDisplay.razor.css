@@ -1,0 +1,15 @@
+.coordinate-display {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: var(--12-regular-font-family);
+    font-weight: var(--12-regular-font-weight);
+    font-size: var(--12-regular-font-size);
+    letter-spacing: var(--14-regular-letter-spacing);
+    pointer-events: none;
+    z-index: 10;
+}

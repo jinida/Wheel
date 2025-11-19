@@ -1,0 +1,34 @@
+<div class="toast-container">
+    @foreach (var toast in GetToastsCopy())
+    {
+        <div class="toast @toast.Type @(toast.IsVisible ? "show" : "")" @key="toast.Id">
+            <div class="toast-icon">
+                @if (toast.Type == "error")
+                {
+                    <span>⚠️</span>
+                }
+                else if (toast.Type == "success")
+                {
+                    <span>✓</span>
+                }
+                else if (toast.Type == "info")
+                {
+                    <span>ℹ️</span>
+                }
+                else
+                {
+                    <span>⚠️</span>
+                }
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">@toast.Title</div>
+                @if (!string.IsNullOrEmpty(toast.Message))
+                {
+                    <div class="toast-message">@toast.Message</div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+
