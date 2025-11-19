@@ -1,0 +1,62 @@
+# Build results
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+
+# Visual Studio files
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Database files
+*.dbmdl
+*.jfm
+
+# Test results
+*.trx
+WheelApp.Test/TestResults/
+TestResults/
+
+# Logs
+*.log
+Logs/
+
+# User-specific files
+appsettings.Development.json
+appsettings.local.json
+
+# Application data
+AppData/
+**/AppData/
+
+# Image files (uploaded by users)
+**/Images/*.jpg
+**/Images/*.jpeg
+**/Images/*.png
+**/Images/*.gif
+**/Images/*.bmp
+
+# Model files
+**/Models/*.pt
+**/Models/*.onnx
+**/Models/*.pth
+
+# Temporary files
+*claude*
+CodeReview/
+WheelApp_Backup/
+scripts/
+visualizations/
+WheelApp/wwwroot/uploads/
+
+# Package manager
+node_modules/
+package-lock.json
+
+# OS files
+.DS_Store
+Thumbs.db
