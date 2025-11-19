@@ -1,0 +1,16 @@
+CREATE TABLE [dbo].[Image]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL,
+    [Name] NVARCHAR(50) NOT NULL,
+    [Path] NVARCHAR(512) NOT NULL,
+    [DatasetId] INT NOT NULL,
+    [CreatedAt] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [RowVersion] ROWVERSION NOT NULL,
+
+    CONSTRAINT [PK_Image] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_Image_Dataset] FOREIGN KEY ([DatasetId]) REFERENCES [dbo].[Dataset]([Id]) ON DELETE CASCADE
+)
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Image_DatasetId] ON [dbo].[Image] ([DatasetId])
+GO

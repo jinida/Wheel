@@ -1,0 +1,15 @@
+CREATE TABLE [dbo].[Dataset]
+(
+    [Id] INT IDENTITY(1,1) NOT NULL,
+    [Name] NVARCHAR(50) NOT NULL,
+    [Description] NVARCHAR(255) NULL,
+    [CreatedAt] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    [CreatedBy] NVARCHAR(100) NULL,
+    [ModifiedAt] DATETIME2 NULL,
+    [ModifiedBy] NVARCHAR(100) NULL,
+    [RowVersion] ROWVERSION NOT NULL,
+
+    CONSTRAINT [PK_Dataset] PRIMARY KEY CLUSTERED ([Id] ASC)
+)
+GO
+
