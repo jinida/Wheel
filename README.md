@@ -298,55 +298,24 @@ Multiple Active Result Sets (MARS) enabled to handle concurrent database queries
 4. Update documentation as needed
 5. Submit pull request to `dev` branch
 
-## Third-Party Libraries
-
-This project uses the following libraries:
-
-### Backend
-- **.NET 8** - MIT License - Copyright (c) .NET Foundation and Contributors
-- **Entity Framework Core 9.0** - MIT License - Copyright (c) .NET Foundation and Contributors
-- **MediatR 12.4.1** - MIT License (Note: v13+ uses commercial license)
-- **AutoMapper 13.0.1** - Reciprocal Public License 1.5 (RPL-1.5) / Community License
-  - Free for organizations with less than $10M USD in capital
-  - See: https://automapper.io/ for licensing details
-- **FluentValidation 11.11** - Apache License 2.0 - Copyright (c) .NET Foundation, Jeremy Skinner
-- **Serilog** - Apache License 2.0 - Copyright (c) Serilog Contributors
-
-### Frontend
-- **Bootstrap 5** - MIT License - Copyright (c) Twitter, Inc.
-- **Open Iconic** - MIT License
-
-### License Compliance
-All third-party libraries are used in accordance with their respective licenses. This project qualifies for AutoMapper's Community License as a non-commercial open-source project.
-
 ## License
 
-MIT License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Copyright (c) 2025 jinida
+### Third-Party Dependencies
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+| Library | Version | License |
+|---------|---------|---------|
+| .NET | 8.0 | MIT |
+| Entity Framework Core | 9.0 | MIT |
+| MediatR | 12.4 | MIT |
+| AutoMapper | 13.0 | RPL-1.5 / Community |
+| FluentValidation | 11.11 | Apache 2.0 |
+| Serilog | Latest | Apache 2.0 |
+| Bootstrap | 5.x | MIT |
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+**Note:** AutoMapper 13.0+ uses a dual-license model. This project qualifies for the free Community License.
 
 ## Support
 
 For issues and questions, please create an issue in the GitHub repository.
-
----
-
-**Built with Clean Architecture and Domain-Driven Design principles**
