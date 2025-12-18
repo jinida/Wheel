@@ -17,10 +17,15 @@ namespace WheelApp.Domain.ValueObjects
             Name = name;
         }
 
-        public static RoleType Train => new(0, "Train");
-        public static RoleType Validation => new(1, "Validation");
-        public static RoleType Test => new(2, "Test");
-        public static RoleType None => new(3, "None");
+        private static readonly RoleType _train = new(0, "Train");
+        private static readonly RoleType _validation = new(1, "Validation");
+        private static readonly RoleType _test = new(2, "Test");
+        private static readonly RoleType _none = new(3, "None");
+
+        public static RoleType Train => _train;
+        public static RoleType Validation => _validation;
+        public static RoleType Test => _test;
+        public static RoleType None => _none;
 
         /// <summary>
         /// Creates a RoleType from an integer value

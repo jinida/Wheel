@@ -17,10 +17,15 @@ namespace WheelApp.Domain.ValueObjects
             Name = name;
         }
 
-        public static ProjectType Classification => new(0, "Classification");
-        public static ProjectType ObjectDetection => new(1, "Object Detection");
-        public static ProjectType Segmentation => new(2, "Segmentation");
-        public static ProjectType AnomalyDetection => new(3, "Anomaly Detection");
+        private static readonly ProjectType _classification = new(0, "Classification");
+        private static readonly ProjectType _objectDetection = new(1, "Object Detection");
+        private static readonly ProjectType _segmentation = new(2, "Segmentation");
+        private static readonly ProjectType _anomalyDetection = new(3, "Anomaly Detection");
+
+        public static ProjectType Classification => _classification;
+        public static ProjectType ObjectDetection => _objectDetection;
+        public static ProjectType Segmentation => _segmentation;
+        public static ProjectType AnomalyDetection => _anomalyDetection;
 
         private static readonly Dictionary<int, Func<ProjectType>> _factory = new()
         {
