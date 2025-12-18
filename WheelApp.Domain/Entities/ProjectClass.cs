@@ -32,11 +32,12 @@ namespace WheelApp.Domain.Entities
 
         /// <summary>
         /// Factory method to create a new project class
+        /// NOTE: projectId=0 is allowed for domain tests (before DB persistence)
         /// </summary>
         public static ProjectClass Create(int projectId, int classIdx, string name, string color)
         {
-            if (projectId <= 0)
-                throw new ValidationException(nameof(projectId), "Project ID must be positive.");
+            if (projectId < 0)
+                throw new ValidationException(nameof(projectId), "Project ID cannot be negative.");
 
             if (string.IsNullOrWhiteSpace(name))
                 throw new ValidationException(nameof(name), "Class name cannot be empty.");

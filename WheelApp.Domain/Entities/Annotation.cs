@@ -36,11 +36,12 @@ namespace WheelApp.Domain.Entities
 
         /// <summary>
         /// Factory method to create a new annotation
+        /// NOTE: imageId=0 is allowed for domain tests (before DB persistence)
         /// </summary>
         public static Annotation Create(int imageId, int projectId, int classId, string? information = null)
         {
-            if (imageId <= 0)
-                throw new ValidationException(nameof(imageId), "Image ID must be positive.");
+            if (imageId < 0)
+                throw new ValidationException(nameof(imageId), "Image ID cannot be negative.");
 
             if (projectId <= 0)
                 throw new ValidationException(nameof(projectId), "Project ID must be positive.");

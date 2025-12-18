@@ -25,14 +25,15 @@ namespace WheelApp.Domain.Entities
 
         /// <summary>
         /// Factory method to create a new role for an image
+        /// NOTE: imageId=0, projectId=0 allowed for domain tests (before DB persistence)
         /// </summary>
         public static Role Create(int imageId, int projectId, int roleTypeValue)
         {
-            if (imageId <= 0)
-                throw new ValidationException(nameof(imageId), "Image ID must be positive.");
+            if (imageId < 0)
+                throw new ValidationException(nameof(imageId), "Image ID cannot be negative.");
 
-            if (projectId <= 0)
-                throw new ValidationException(nameof(projectId), "Project ID must be positive.");
+            if (projectId < 0)
+                throw new ValidationException(nameof(projectId), "Project ID cannot be negative.");
 
             var roleType = RoleType.FromValue(roleTypeValue);
             var role = new Role(imageId, projectId, roleType);

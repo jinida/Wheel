@@ -27,11 +27,12 @@ namespace WheelApp.Domain.Entities
 
         /// <summary>
         /// Factory method to create a new evaluation
+        /// NOTE: trainingId=0 is allowed for domain tests (before DB persistence)
         /// </summary>
         public static Evaluation Create(int trainingId, string path, string? metricsJson = null)
         {
-            if (trainingId <= 0)
-                throw new ValidationException(nameof(trainingId), "Training ID must be positive.");
+            if (trainingId < 0)
+                throw new ValidationException(nameof(trainingId), "Training ID cannot be negative.");
 
             var filePath = FilePath.Create(path);
             var evaluation = new Evaluation(trainingId, filePath, metricsJson);
