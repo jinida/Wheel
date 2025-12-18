@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using WheelApp.Application.Common.Interfaces;
 using WheelApp.Application.Common.Options;
 using WheelApp.Domain.Common;
 
@@ -8,7 +9,7 @@ namespace WheelApp.Application.Services;
 /// <summary>
 /// Service for validating image files
 /// </summary>
-public class ImageValidationService
+public class ImageValidationService : IImageValidationService
 {
     private readonly ILogger<ImageValidationService> _logger;
     private readonly FileUploadOptions _options;

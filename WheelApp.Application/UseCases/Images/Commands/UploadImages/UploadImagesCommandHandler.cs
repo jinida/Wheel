@@ -20,14 +20,14 @@ public class UploadImagesCommandHandler : ICommandHandler<UploadImagesCommand, R
     private readonly IImageRepository _imageRepository;
     private readonly IDatasetRepository _datasetRepository;
     private readonly IFileStorage _fileStorage;
-    private readonly ImageValidationService _validationService;
+    private readonly IImageValidationService _validationService;
     private readonly ILogger<UploadImagesCommandHandler> _logger;
 
     public UploadImagesCommandHandler(
         IImageRepository imageRepository,
         IDatasetRepository datasetRepository,
         IFileStorage fileStorage,
-        ImageValidationService validationService,
+        IImageValidationService validationService,
         ILogger<UploadImagesCommandHandler> logger)
     {
         _imageRepository = imageRepository;

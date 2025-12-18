@@ -18,14 +18,14 @@ public class CreateDatasetCommandHandler : ICommandHandler<CreateDatasetCommand,
     private readonly IDatasetRepository _datasetRepository;
     private readonly IImageRepository _imageRepository;
     private readonly IFileStorage _fileStorage;
-    private readonly ImageValidationService _validationService;
+    private readonly IImageValidationService _validationService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<CreateDatasetCommandHandler> _logger;
     public CreateDatasetCommandHandler(
         IDatasetRepository datasetRepository,
         IImageRepository imageRepository,
         IFileStorage fileStorage,
-        ImageValidationService validationService,
+        IImageValidationService validationService,
         IUnitOfWork unitOfWork,
         ILogger<CreateDatasetCommandHandler> logger)
     {

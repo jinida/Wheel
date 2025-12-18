@@ -42,7 +42,7 @@ public static class DependencyInjection
         services.Configure<FileUploadOptions>(configuration.GetSection(FileUploadOptions.SectionName));
 
         // Register common services
-        services.AddScoped<ImageValidationService>();
+        services.AddScoped<IImageValidationService, ImageValidationService>();
 
         // Register concurrency control (Scoped per user session/SignalR connection)
         services.AddScoped<DbContextConcurrencyGuard>();

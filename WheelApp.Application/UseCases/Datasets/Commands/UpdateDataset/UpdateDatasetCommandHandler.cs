@@ -20,7 +20,8 @@ public class UpdateDatasetCommandHandler : ICommandHandler<UpdateDatasetCommand,
         IDatasetRepository datasetRepository,
         IMapper mapper)
     {
-        _datasetRepository = datasetRepository;        _mapper = mapper;
+        _datasetRepository = datasetRepository;
+        _mapper = mapper;
     }
 
     public async Task<Result<DatasetDto>> Handle(UpdateDatasetCommand request, CancellationToken cancellationToken)
@@ -43,7 +44,7 @@ public class UpdateDatasetCommandHandler : ICommandHandler<UpdateDatasetCommand,
         dataset.UpdateName(request.Name, request.ModifiedBy);
         dataset.UpdateDescription(request.Description, request.ModifiedBy);
 
-        // Persist changes
+        // No need to call UpdateAsync - entity is already tracked by EF Core
         // Changes are saved automatically by TransactionBehavior
 
         // Map to DTO and return
